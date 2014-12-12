@@ -1,17 +1,10 @@
 package cb.tailorswift.behvior;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-
-import javax.swing.ProgressMonitor;
+import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -23,28 +16,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleConstants;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
+import org.osgi.framework.Bundle;
 
 import tailorswift.Activator;
 
 public class WebScaldingProjectSupport {
+	
+	private ExcecuteCommand command = new ExcecuteCommand();
+
 	/**
 	 * For this marvelous project we need to:
 	 * - create the default Eclipse project
@@ -68,7 +50,7 @@ public class WebScaldingProjectSupport {
 		} catch (CoreException e) {
 
 			e.printStackTrace();
-			openError(e, "End of the world is near");
+			command.openError(e, "End of the world is near");
 			project = null;
 		}
 
@@ -76,18 +58,12 @@ public class WebScaldingProjectSupport {
 	}
 
 	private  void addToProjectStructure(String projectFolder) throws CoreException {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();  
-
-		//get location of workspace (java.io.File)  
-		IPath workspaceDirectory = workspace.getRoot().getLocation();
-		IPath path = workspaceDirectory.append(projectFolder);
+		String absolutePath = getProjectAbsolutePath(projectFolder);
 		try {
-			InputStream is= WebScaldingProjectSupport.class.getClassLoader().getResourceAsStream("jobtemplate.zip");
-			new UnZip().unZipIt(is, path.toFile().getAbsolutePath());
-			runWithProgressMonitor(path.toFile().getAbsolutePath(), projectFolder,null);
+			runWithProgressMonitor(absolutePath, projectFolder,null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			openError(e, "Unzip error");
+			command.openError(e, "Unzip error");
 			e.printStackTrace();
 		}
 
@@ -95,23 +71,45 @@ public class WebScaldingProjectSupport {
 
 	}
 
+	public String getProjectAbsolutePath(String projectFolder) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+
+		//get location of workspace (java.io.File)  
+		IPath workspaceDirectory = workspace.getRoot().getLocation();
+		IPath path = workspaceDirectory.append(projectFolder);
+		String absolutePath =path.toFile().getAbsolutePath();
+		return absolutePath;
+	}
+
 	public void  runWithProgressMonitor( final String absolutePath,final String projectName, IProgressMonitor monitor) {
-		Job job = new Job("Build Scala project") {
+		Job job = new Job("Generate a template Webscalding  project") {
 			protected IStatus run(IProgressMonitor monitor) { 
-				monitor.beginTask("Job started...", 2); 
+				monitor.beginTask("Creating a webscalding project..", 3); 
 				try {
-					buildProject(absolutePath);
+					unzipProject(absolutePath);
+					monitor.worked(1);
+					command.executeCommand(new String[]{"sbt",  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
 					monitor.worked(1);
 					refreshProject(projectName, monitor);
 					monitor.worked(1);
 
 				} catch ( IOException | InterruptedException | CoreException e) {
 					// TODO Auto-generated catch block
-
+					command.openError(e, "Error thrown");
 					e.printStackTrace();
 				}
 				monitor.done(); 
 				return Status.OK_STATUS; 
+			}
+
+			private void unzipProject(String absolutePath) throws FileNotFoundException, IOException {
+				
+			//	Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+				URL fileURL =  new URL("platform:/plugin/TailorSwift/resources/jobtemplate.zip");
+			//	bundle.getResource("jobtemplate.zip");
+				InputStream is=fileURL.openConnection().getInputStream();
+				new UnZip().unZipIt(is,absolutePath);
+				
 			} 
 		}; 
 		job.setUser(true);
@@ -119,71 +117,13 @@ public class WebScaldingProjectSupport {
 
 	}
 
-	private  void buildProject(String absolutePath) throws IOException, InterruptedException, PartInitException {
-
-
-		Runtime r = Runtime.getRuntime();
-		Process p = r.exec(new String[]{"sbt", "clean", "eclipse"}, new String[]{}, new File(absolutePath));
-		//	p.waitFor();
-		BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		BufferedReader b1 = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-		String line = "";
-		MessageConsole myConsole = findConsole("WebScalding");
-		showConsole(myConsole);
-		MessageConsoleStream out = myConsole.newMessageStream();
-		while ((line = b.readLine()) != null) {
-			out.println(line);
-		}
-		while ((line = b1.readLine()) != null) {
-			out.println(line);
-		}
-
-		b.close();
-		b1.close();
-
-	}
+	
 	private void refreshProject(final String projectName, IProgressMonitor monitor) throws CoreException {
 
 					ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).refreshLocal(IResource.DEPTH_INFINITE, monitor);
 	
 	}
 
-	private void showConsole(final MessageConsole myConsole) throws PartInitException {
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				IWorkbench wb = PlatformUI.getWorkbench();
-				IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
-				IWorkbenchPage page = win.getActivePage();
-
-				String id = IConsoleConstants.ID_CONSOLE_VIEW;
-				IConsoleView view;
-				try {
-					view = (IConsoleView) page.showView(id);
-					view.display(myConsole);
-				} catch (PartInitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		});
-
-
-	}
-
-	private MessageConsole findConsole(String name) {
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
-		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
-				return (MessageConsole) existing[i];
-		//no console found, so create a new one
-		MessageConsole myConsole = new MessageConsole(name, null);
-
-		conMan.addConsoles(new IConsole[]{myConsole});
-		return myConsole;
-	}
 
 	/**
 	 * Just do the basics: create a basic project.
@@ -223,21 +163,5 @@ public class WebScaldingProjectSupport {
 
 
 
-	public  void openError(Exception ex, final String title) {
-		StringWriter writer = new StringWriter();
-		ex.printStackTrace(new PrintWriter(writer));
-
-		final String message = ex.getMessage();
-		final String formattedMessage = Activator.PLUGIN_ID + " : " + message; //$NON-NLS-1$
-		final Status status = new Status(IStatus.ERROR,Activator. PLUGIN_ID, formattedMessage, new Throwable(writer.toString()));
-
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				ErrorDialog.openError(Display.getDefault().getActiveShell(),
-						title, message, status);
-			}
-		});
-	}
-
+	
 }
