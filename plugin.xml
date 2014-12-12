@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="WebScalding"
+            id="tailorswift.category.wizards">
+      </category>
+      <wizard
+            name="New WebScaldingJob"
+            icon="icons/sample.gif"
+            category="tailorswift.category.wizards"
+            class="cb.tailorswift.wizards.WebScaldingNewJob"
+            id="cb.taylorswift.wizards.WebScaldingNewJob">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="tailorswift.category.wizards"
+            name="WebScalding">
+      </category>
+      <wizard
+            canFinishEarly="true"
+            category="tailorswift.category.wizards"
+            class="cb.tailorswift.wizards.WebScaldingNewProject"
+            id="cb.taylorswift.wizards.WebScaldingNewProject"
+            name="New WebScalding Project"
+            project="true">
+      </wizard>
+   </extension>
+
+</plugin>
