@@ -88,7 +88,7 @@ public class WebScaldingProjectSupport {
 				try {
 					unzipProject(absolutePath);
 					monitor.worked(1);
-					command.executeCommand(new String[]{"sbt",  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
+					command.executeCommand(new String[]{"/Users/fjacob/sbt/bin/sbt",  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
 					monitor.worked(1);
 					refreshProject(projectName, monitor);
 					monitor.worked(1);
@@ -105,7 +105,7 @@ public class WebScaldingProjectSupport {
 			private void unzipProject(String absolutePath) throws FileNotFoundException, IOException {
 				
 			//	Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-				URL fileURL =  new URL("platform:/plugin/TailorSwift/resources/jobtemplate.zip");
+				URL fileURL =  new URL("platform:/plugin/"+ Activator.PLUGIN_ID+"/resources/jobtemplate.zip");
 			//	bundle.getResource("jobtemplate.zip");
 				InputStream is=fileURL.openConnection().getInputStream();
 				new UnZip().unZipIt(is,absolutePath);

@@ -1,8 +1,6 @@
 package cb.tailorswift.launch;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -15,7 +13,6 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 import cb.tailorswift.behvior.ExcecuteCommand;
-import cb.tailorswift.behvior.UnZip;
 import cb.tailorswift.behvior.WebScaldingProjectSupport;
 
 public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
@@ -60,14 +57,14 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 				
 				String projectName = configuration.getAttribute(PROJECT_NAME, "");
 				
-				command.executeCommand(new String[]{"sbt", "-Dsbt.log.noformat=true","clean", "assembly"},  support.getProjectAbsolutePath(projectName));
+				command.executeCommand(new String[]{"/Users/fjacob/sbt/bin/sbt", "-Dsbt.log.noformat=true","clean", "assembly"},  support.getProjectAbsolutePath(projectName));
 
 				
 			}
 			private void uploadResource(ILaunchConfiguration configuration, String fullPath) throws CoreException, IOException, InterruptedException {
 				String projectName = configuration.getAttribute(PROJECT_NAME, "");
 		//scp scripts/runOnCB.sh fjacob.site@qtmhgate1.atl.careerbuilder.com:
-				command.executeCommand(new String[]{"scp", fullPath, "fjacob.site@qtmhgate1.atl.careerbuilder.com:"},  support.getProjectAbsolutePath(projectName));
+				command.executeCommand(new String[]{"/usr/bin/scp", fullPath, "fjacob.site@qtmhgate1.atl.careerbuilder.com:"},  support.getProjectAbsolutePath(projectName));
 
 				
 			}
@@ -88,7 +85,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 			private void submitJob(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException {
 				String projectName = configuration.getAttribute(PROJECT_NAME, "");
 				//ssh fjacob.site@qtmhgate1.atl.careerbuilder.com 'nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &'
-				command.executeCommand(new String[]{"ssh", "fjacob.site@qtmhgate1.atl.careerbuilder.com","nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &"},  support.getProjectAbsolutePath(projectName));
+				command.executeCommand(new String[]{"/usr/bin/ssh", "fjacob.site@qtmhgate1.atl.careerbuilder.com","nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &"},  support.getProjectAbsolutePath(projectName));
 
 			}
 
