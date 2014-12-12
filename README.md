@@ -1,4 +1,43 @@
 TailorSwift
 ===========
 
-Eclipse plugin tailored for swift big data access using scalding
+Eclipse plugin tailored for swift big data access using scalding. This is an eclipse plugin for creating a Scalding/WebScalding projects. The plugin  has the capability of deploying the fatjar of the project along with a script file (to execute the fatjar)
+
+
+<b> Prerequisites </b>
+
+1. Unix environment (Implemented in Mac, see no problems in working on a Linux machine)
+2. SBT installed ( Works on 0.13.7)
+3. Eclipse with Scala-ide (Works on Eclipse Kepler and scala-ide 3.0.3)
+
+
+<b> Installation </b>
+
+1. Download the latest release from <a href="https://github.com/feroshjacob/TailorSwift/releases">here </a>
+2. Install the plugin into your Eclipse IDE from the archive file  using the instructions  mentioned  <a href="https://developers.google.com/eclipse/docs/install-from-zip">here </a>
+
+<b> How to use </b>
+
+<i>Creating a WebScalding Project </i> 
+  
+  - Select "File" -> "New"  -> "Project" -> "Webscalding" -> "New WebScalding Project" -> "Next" 
+  - Enter a name for the project
+  - "Finish"
+
+A SCALA project should be  created  and user can run it in a cluster (Currently the cluster details are hard coded, can be changed later ).
+
+<i>Runing a WebScalding Project </i> 
+   - Select "Run" -> "Run Configurations" -> "New Configuration" 
+   - Select the project you want to run
+   - Select the script file you want to execute
+   - "Run"
+
+
+Have fun!
+ 
+
+
+
+
+
+
