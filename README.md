@@ -9,6 +9,7 @@ Eclipse plugin tailored for swift big data access using scalding. This is an ecl
 1. Unix environment (Implemented in Mac, see no problems in working on a Linux machine)
 2. SBT installed ( Works on 0.13.7)
 3. Eclipse with Scala-ide (Works on Eclipse Kepler and scala-ide 3.0.3)
+4. Set up the server without password access <a href="http://www.linuxproblem.org/art_9.html> (Help) </a> 
 
 
 <b> Installation </b>
