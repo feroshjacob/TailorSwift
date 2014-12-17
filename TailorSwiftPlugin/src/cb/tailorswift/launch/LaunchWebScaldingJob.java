@@ -12,8 +12,8 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
-import cb.tailorswift.behvior.ExcecuteCommand;
-import cb.tailorswift.behvior.WebScaldingProjectSupport;
+import cb.tailorswift.behviour.ExcecuteCommand;
+import cb.tailorswift.behviour.WebScaldingProjectSupport;
 
 public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
