@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: TailorSwiftPlugin;singleton:=true
-Bundle-Version: 0.0.9
+Bundle-Version: 0.0.14
 Bundle-Activator: tailorswift.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -16,7 +16,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: cb.tailorswift.behavior,
- cb.tailorswift.behvior,
+ cb.tailorswift.behviour,
  cb.tailorswift.launch,
  cb.tailorswift.wizards,
  tailorswift

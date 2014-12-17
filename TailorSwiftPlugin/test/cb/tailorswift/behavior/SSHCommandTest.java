@@ -1,14 +1,9 @@
 package cb.tailorswift.behavior;
 
-import static org.junit.Assert.*;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
 import org.junit.Test;
 
 public class SSHCommandTest {

@@ -1,4 +1,4 @@
-package cb.tailorswift.behvior;
+package cb.tailorswift.behviour;
 
 import java.io.File;
 import java.io.FileInputStream;
