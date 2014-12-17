@@ -1,4 +1,4 @@
-package cb.tailorswift.behvior;
+package cb.tailorswift.behviour;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -88,7 +88,7 @@ public class WebScaldingProjectSupport {
 				try {
 					unzipProject(absolutePath);
 					monitor.worked(1);
-					command.executeCommand(new String[]{"/Users/fjacob/sbt/bin/sbt",  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
+					command.executeCommand(new String[]{Activator.getSBTPath(),  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
 					monitor.worked(1);
 					refreshProject(projectName, monitor);
 					monitor.worked(1);
@@ -158,7 +158,6 @@ public class WebScaldingProjectSupport {
 
 		return newProject;
 	}
-
 
 
 

@@ -1,4 +1,4 @@
-package cb.tailorswift.behvior;
+package cb.tailorswift.behviour;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +35,7 @@ public class ExcecuteCommand {
 
 		Runtime r = Runtime.getRuntime();
 		
-		Process p = r.exec(command, new String[]{}, new File(absolutePath));
+		Process p = r.exec(command, null, new File(absolutePath));
 				//p.waitFor();
 		BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		BufferedReader b1 = new BufferedReader(new InputStreamReader(p.getErrorStream()));
