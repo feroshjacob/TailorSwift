@@ -53,6 +53,14 @@
             name="TailorSwift.tab2">
       </tab>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+         
+         <page id="TailorSwiftPreferencePage" 
+ 		name="Tailor Swift"
+    		class="cb.tailorswift.preferences.TailorSwiftPreferencePage">
+   	</page> 
+   </extension>
 
 
 </plugin>
