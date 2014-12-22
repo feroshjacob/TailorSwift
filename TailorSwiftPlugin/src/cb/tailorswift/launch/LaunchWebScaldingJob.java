@@ -16,8 +16,8 @@ import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import com.jcraft.jsch.JSchException;
 
 import tailorswift.Activator;
-import cb.tailorswift.behviour.ExcecuteCommand;
-import cb.tailorswift.behviour.WebScaldingProjectSupport;
+import cb.tailorswift.behavior.ExcecuteCommand;
+import cb.tailorswift.behavior.WebScaldingProjectSupport;
 import cb.tailorswift.ssh.FileTransfer;
 import cb.tailorswift.ssh.SSHCommand;
 

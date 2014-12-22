@@ -9,8 +9,8 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import cb.tailorswift.behviour.UnZip;
-import cb.tailorswift.behviour.WebScaldingProjectSupport;
+import cb.tailorswift.behavior.UnZip;
+import cb.tailorswift.behavior.WebScaldingProjectSupport;
 
 public class UnzipTest {
 

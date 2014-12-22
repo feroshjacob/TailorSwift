@@ -1,4 +1,4 @@
-package cb.tailorswift.behviour;
+package cb.tailorswift.behavior;
 
 import java.io.BufferedReader;
 import java.io.File;

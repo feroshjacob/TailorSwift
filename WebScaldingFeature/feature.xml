@@ -2,7 +2,7 @@
 <feature
       id="WebScaldingFeature"
       label="WebScaldingFeature"
-      version="2.0.8">
+      version="0.0.16">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]

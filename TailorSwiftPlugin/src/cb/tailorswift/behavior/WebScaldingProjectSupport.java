@@ -1,8 +1,10 @@
-package cb.tailorswift.behviour;
+package cb.tailorswift.behavior;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
@@ -20,6 +22,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.Bundle;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 import tailorswift.Activator;
 
@@ -84,14 +89,18 @@ public class WebScaldingProjectSupport {
 	public void  runWithProgressMonitor( final String absolutePath,final String projectName, IProgressMonitor monitor) {
 		Job job = new Job("Generate a template Webscalding  project") {
 			protected IStatus run(IProgressMonitor monitor) { 
-				monitor.beginTask("Creating a webscalding project..", 3); 
+				monitor.beginTask("Creating a webscalding project..", 4); 
 				try {
 					unzipProject(absolutePath);
+					monitor.worked(1);
+					applyTemplates(projectName);
 					monitor.worked(1);
 					command.executeCommand(new String[]{Activator.getSBTPath(),  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
 					monitor.worked(1);
 					refreshProject(projectName, monitor);
 					monitor.worked(1);
+					
+					
 
 				} catch ( IOException | InterruptedException | CoreException e) {
 					// TODO Auto-generated catch block
@@ -101,6 +110,7 @@ public class WebScaldingProjectSupport {
 				monitor.done(); 
 				return Status.OK_STATUS; 
 			}
+
 
 			private void unzipProject(String absolutePath) throws FileNotFoundException, IOException {
 				
@@ -124,7 +134,24 @@ public class WebScaldingProjectSupport {
 	
 	}
 
+	private void applyTemplates(String projectName) throws IOException {
+		overwriteFile("build.stg", "build.sbt", projectName);
+		overwriteFile("runOnHadoop.stg", "scripts"+ File.separator+ "runOnHadoop.sh", projectName);
+	}
 
+    private void overwriteFile(String templateName, String newFile,String projectName) throws IOException {
+    	
+    	URL fileURL =  new URL("platform:/plugin/"+ Activator.PLUGIN_ID+"/resources/"+ templateName);
+		STGroup group = new STGroupFile(fileURL, "UTF-8", '<', '>');
+		ST st = group.getInstanceOf("template");
+		//List<String> names =  new ArrayList<String>();
+		st.add("project", projectName);
+		String fullPath = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getLocation().toFile().getAbsolutePath()+ File.separator+newFile;
+	  st.write(new File(fullPath), null);
+	  
+    }
+	
+	
 	/**
 	 * Just do the basics: create a basic project.
 	 *

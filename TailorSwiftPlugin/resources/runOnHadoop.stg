@@ -1,0 +1,3 @@
+template(project) ::=<<#!/bin/bash
+hadoop jar <project>-assembly-0.0.1.jar cb.datascience.tailorswift.WordCountJob --hdfs --input testwordcount --output output 
+>>

@@ -8,7 +8,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-import cb.tailorswift.behviour.WebScaldingProjectSupport;
+import cb.tailorswift.behavior.WebScaldingProjectSupport;
 
 public class WebScaldingNewProject extends Wizard implements INewWizard {
 	
