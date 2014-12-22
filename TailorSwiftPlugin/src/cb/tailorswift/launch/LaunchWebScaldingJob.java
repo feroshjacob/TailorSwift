@@ -1,5 +1,6 @@
 package cb.tailorswift.launch;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -12,8 +13,13 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
+import com.jcraft.jsch.JSchException;
+
+import tailorswift.Activator;
 import cb.tailorswift.behviour.ExcecuteCommand;
 import cb.tailorswift.behviour.WebScaldingProjectSupport;
+import cb.tailorswift.ssh.FileTransfer;
+import cb.tailorswift.ssh.SSHCommand;
 
 public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
@@ -46,6 +52,10 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
 					command.openError(e, "Job submission failed!");
+				} catch (JSchException e) {
+					// TODO Auto-generated catch block
+					command.openError(e, "Job submission failed!");
+					
 				}
 				
 						monitor.done(); 
@@ -57,35 +67,40 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 				
 				String projectName = configuration.getAttribute(PROJECT_NAME, "");
 				
-				command.executeCommand(new String[]{"/Users/fjacob/sbt/bin/sbt", "-Dsbt.log.noformat=true","clean", "assembly"},  support.getProjectAbsolutePath(projectName));
+				command.executeCommand(new String[]{Activator.getSBTPath(), "-Dsbt.log.noformat=true","clean", "assembly"},  support.getProjectAbsolutePath(projectName));
 
 				
 			}
-			private void uploadResource(ILaunchConfiguration configuration, String fullPath) throws CoreException, IOException, InterruptedException {
-				String projectName = configuration.getAttribute(PROJECT_NAME, "");
+			private void uploadResource(File file) throws CoreException, IOException, InterruptedException, JSchException {
+				
 		//scp scripts/runOnCB.sh fjacob.site@qtmhgate1.atl.careerbuilder.com:
-				command.executeCommand(new String[]{"/usr/bin/scp", fullPath, "fjacob.site@qtmhgate1.atl.careerbuilder.com:"},  support.getProjectAbsolutePath(projectName));
-
+				FileTransfer ft = new FileTransfer(Activator.getSSHUserName(), Activator.getSSHHostName(), Activator.getSSHPassword());
+				ft.transferFile(file, file.getName());
 				
 			}
 
-			private void uploadAssembly(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException {
-				String assemblyPath = "target/scala-2.10/WordCount-assembly-0.0.1.jar";
-				uploadResource(configuration, assemblyPath);
+			private void uploadAssembly(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException, JSchException {
+				String projectName = configuration.getAttribute(PROJECT_NAME, "");
+				String path= support.getProjectAbsolutePath(projectName)+ File.separator+ "target"+ File.separator + "scala-2.10" + File.separator+projectName+"-assembly-0.0.1.jar";
+				uploadResource(new File( path));
 				
 			}
 
-			private void uploadScript(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException {
+			private void uploadScript(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException, JSchException {
 				String scriptFile =  configuration.getAttribute(SCRIPT_PATH, "");
 				String scriptPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile().getAbsolutePath()+scriptFile;
-				uploadResource(configuration, scriptPath);
+				uploadResource(new File( scriptPath));
 				
 			}
 
-			private void submitJob(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException {
-				String projectName = configuration.getAttribute(PROJECT_NAME, "");
+			private void submitJob(ILaunchConfiguration configuration) throws CoreException, IOException, InterruptedException, JSchException {
+				String scriptPath =  configuration.getAttribute(SCRIPT_PATH, "");
+				String scriptFileName= scriptPath.substring(scriptPath.lastIndexOf('/')+1);
 				//ssh fjacob.site@qtmhgate1.atl.careerbuilder.com 'nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &'
-				command.executeCommand(new String[]{"/usr/bin/ssh", "fjacob.site@qtmhgate1.atl.careerbuilder.com","nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &"},  support.getProjectAbsolutePath(projectName));
+				
+				SSHCommand sshCommand = new SSHCommand(Activator.getSSHUserName(), Activator.getSSHHostName(), Activator.getSSHPassword());
+				sshCommand.execute("nohup /bin/sh "+scriptFileName+" `</dev/null` >nohup.out 2>&1 &");
+			//	command.executeCommand(new String[]{"/usr/bin/ssh", "fjacob.site@qtmhgate1.atl.careerbuilder.com","nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &"},  support.getProjectAbsolutePath(projectName));
 
 			}
 

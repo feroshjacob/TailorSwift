@@ -83,4 +83,19 @@ public class Activator extends AbstractUIPlugin {
 	public static String getSBTPath() {
 		return getDefault().getPreferenceStore().getString(SBT_HOME) ;
 	}
+	public static String getSSHUserName() {
+		String connectionString= getDefault().getPreferenceStore().getString(SSH_CONNECTION_STRING) ;
+	     String user=connectionString.substring(0, connectionString.indexOf('@'));
+	     return user;
+	  
+	}
+	public static String getSSHHostName() {
+		String connectionString= getDefault().getPreferenceStore().getString(SSH_CONNECTION_STRING) ;
+		return connectionString.substring(connectionString.indexOf('@')+1);
+	    
+	}
+	public static String getSSHPassword() {
+		return getDefault().getPreferenceStore().getString(SSH_PASSWORD) ;
+		
+	}
 }

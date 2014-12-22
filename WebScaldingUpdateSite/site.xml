@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/WebScaldingFeature_2.0.7.jar" id="WebScaldingFeature" version="2.0.7">
+   <feature url="features/WebScaldingFeature_2.0.8.jar" id="WebScaldingFeature" version="2.0.8">
       <category name="CBDataScience"/>
    </feature>
    <category-def name="CBDataScience" label="CBDataScience"/>
