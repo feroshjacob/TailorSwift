@@ -9,8 +9,6 @@ Eclipse plugin tailored for swift big data access using scalding. This is an ecl
 1. Unix environment (Implemented in Mac, see no problems in working on a Linux machine)
 2. SBT installed ( Works on 0.13.7)
 3. Eclipse with Scala-ide (Works on Eclipse Kepler and scala-ide 3.0.3)
-4. Set up the server without password access <a href="http://www.linuxproblem.org/art_9.html> (Help) </a> 
-
 
 <b> Installation </b>
 
@@ -18,6 +16,12 @@ Eclipse plugin tailored for swift big data access using scalding. This is an ecl
 2. Install the plugin into your Eclipse IDE from the archive file  using the instructions  mentioned  <a href="https://developers.google.com/eclipse/docs/install-from-zip">here </a>
 
 <b> How to use </b>
+
+<i>Configuring the cluster and SBT installation  </i> 
+
+  -  Selected Preferences -> Tailorswift
+  -  Provide the SBT  binary location (sbt for UNIX/MAC and sbt.bat for Windows)
+  -  Provide the connection string and password for the Cluster connection.
 
 <i>Creating a WebScalding Project </i> 
   
@@ -27,11 +31,15 @@ Eclipse plugin tailored for swift big data access using scalding. This is an ecl
 
 A SCALA project should be  created  and user can run it in a cluster (Currently the cluster details are hard coded, can be changed later ).
 
+
 <i>Runing a WebScalding Project </i> 
    - Select "Run" -> "Run Configurations" -> "New Configuration" 
    - Select the project you want to run
    - Select the script file you want to execute
    - "Run"
+
+An example setup video is given here
+[![ScreenShot](https://github.com/feroshjacob/TailorSwift/blob/master/resources/youtube.png)](http://youtu.be/3cMv6viuwW0)
 
 
 Have fun!
