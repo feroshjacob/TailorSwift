@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="WebScaldingFeature"
-      label="WebScaldingFeature"
-      version="0.0.16">
+      id="TailorSwiftFeature"
+      label="TailorSwiftFeature"
+      version="0.0.1">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
