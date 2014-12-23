@@ -8,8 +8,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -91,13 +93,11 @@ public class ExcecuteCommand {
 		return myConsole;
 	}
 	public   void openError(Exception ex, final String title) {
-		StringWriter writer = new StringWriter();
-		ex.printStackTrace(new PrintWriter(writer));
-
 		final String message = ex.getMessage();
 		final String formattedMessage = Activator.PLUGIN_ID + " : " + message; //$NON-NLS-1$
-		final Status status = new Status(IStatus.ERROR,Activator. PLUGIN_ID, formattedMessage, new Throwable(writer.toString()));
+		final Status status = new Status(IStatus.ERROR,Activator. PLUGIN_ID, formattedMessage, ex);
 
+		Activator.getDefault().getLog().log(status);
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -106,5 +106,18 @@ public class ExcecuteCommand {
 			}
 		});
 	}
+	public   void openInfo(final String message, final String title) {
+		final Status status = new Status(IStatus.INFO,Activator. PLUGIN_ID, message);
+
+		Activator.getDefault().getLog().log(status);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+						title, message);
+			}
+		});
+	}
+
 
 }
