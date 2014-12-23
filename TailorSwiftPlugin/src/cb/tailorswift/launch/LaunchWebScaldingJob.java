@@ -33,6 +33,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 		Job job = new Job("Running Webscalding  project") {
 			protected IStatus run(IProgressMonitor monitor) { 
 				
+				IStatus status =null;
 				 try {
 					 monitor.beginTask("Submitting Scalding Job", 4); 
 					createAssemblyProject(configuration);
@@ -43,23 +44,19 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 					 monitor.worked(1);
 						submitJob(configuration);
 						 monitor.worked(1);
+						 status = Status.OK_STATUS; 
 				
 				
-				} catch (IOException | InterruptedException e) {
+				} catch (IOException | InterruptedException  | CoreException| JSchException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					command.openError(e, "Job submission failed!");
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					command.openError(e, "Job submission failed!");
-				} catch (JSchException e) {
-					// TODO Auto-generated catch block
-					command.openError(e, "Job submission failed!");
+					status= Status.CANCEL_STATUS; 
 					
 				}
-				
+				   
 						monitor.done(); 
-				return Status.OK_STATUS; 
+				return status; 
 			}
 			
 
