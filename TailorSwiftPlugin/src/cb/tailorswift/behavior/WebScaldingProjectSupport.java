@@ -89,23 +89,24 @@ public class WebScaldingProjectSupport {
 	public void  runWithProgressMonitor( final String absolutePath,final String projectName, IProgressMonitor monitor) {
 		Job job = new Job("Generate a template Webscalding  project") {
 			protected IStatus run(IProgressMonitor monitor) { 
-				monitor.beginTask("Creating a webscalding project..", 4); 
+				monitor.beginTask("Creating a webscalding project..", 100); 
 				try {
 					unzipProject(absolutePath);
-					monitor.worked(1);
+					monitor.worked(20);
 					applyTemplates(projectName);
-					monitor.worked(1);
+					monitor.worked(20);
 					command.executeCommand(new String[]{Activator.getSBTPath(),  "-Dsbt.log.noformat=true", "clean", "eclipse"},absolutePath);
-					monitor.worked(1);
+					monitor.worked(40);
 					refreshProject(projectName, monitor);
-					monitor.worked(1);
+					monitor.worked(20);
 					
 					
 
 				} catch ( IOException | InterruptedException | CoreException e) {
 					// TODO Auto-generated catch block
-					command.openError(e, "Error thrown");
-					e.printStackTrace();
+					command.openError(e, "Project creation failed");
+					return Status.CANCEL_STATUS; 
+					
 				}
 				monitor.done(); 
 				return Status.OK_STATUS; 
