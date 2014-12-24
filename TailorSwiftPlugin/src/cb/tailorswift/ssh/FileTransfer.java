@@ -32,7 +32,7 @@ public class FileTransfer {
 		session.setUserInfo(ui);
 		session.connect();
 	}
-	public File tansferFromServer(  String serverPath, String  localFilePath) throws IOException,
+	public File transferFromServer(  String serverPath, String  localFilePath) throws IOException,
 	JSchException {
 		  FileOutputStream fos=null;
 		  String rfile = serverPath;
