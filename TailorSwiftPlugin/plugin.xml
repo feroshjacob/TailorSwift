@@ -88,7 +88,6 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="cb.tailorswift.commands.SynchronizeCommand"
             id="TailorSwiftPlugin.synchronizeNoHupOut"
             name="Update with server">
       </command>

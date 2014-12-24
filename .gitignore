@@ -2,3 +2,6 @@
 TailorSwiftPlugin/.settings/
 TailorSwiftPlugin/bin
 TailorSwiftPlugin/.cbproperties
+TailorSwiftPlugin/.localproperties
+TailorSwiftPlugin/.tests/
+
