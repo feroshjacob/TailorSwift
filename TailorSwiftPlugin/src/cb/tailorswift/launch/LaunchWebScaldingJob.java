@@ -31,6 +31,8 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
 	public void runWithProgressMonitor(
 			final ILaunchConfiguration configuration, IProgressMonitor monitor) {
+		
+	
 		Job job = new JobWithResult("Running Webscalding  project") {
 			
 

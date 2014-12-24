@@ -196,19 +196,28 @@ public class LaunchConfigurationMainTab extends AbstractLaunchConfigurationTab {
     public boolean isValid(ILaunchConfiguration launchConfig) {
         setErrorMessage(null);
         setMessage(null);
-        String text = fileText.getText();
+        
 
-        if (text.length() > 0) {
+      return  resourceExists(fileText.getText()) && resourceExists(projectText.getText()); 
+         
+
+       
+     
+    }
+
+	protected boolean resourceExists(String text) {
+		if (text.length() > 0) {
             IPath path = new Path(text);
             if (ResourcesPlugin.getWorkspace().getRoot().findMember(path) == null) {
                 setErrorMessage("Specified file does not exist");
                 return false;
             }
+            return true;
         } else {
             setMessage("Specify an file");
+            return false;
         }
-        return true;
-    }
+	}
 
     public Composite createComposite(Composite parent, Font font, int columns, int hspan, int fill) {
         Composite g = new Composite(parent, SWT.NONE);
