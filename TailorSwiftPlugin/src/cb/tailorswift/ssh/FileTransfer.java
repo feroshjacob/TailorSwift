@@ -71,7 +71,8 @@ public class FileTransfer {
 	          filesize=filesize*10L+(long)(buf[0]-'0');
 	        }
 
-	        String file=null;
+	        @SuppressWarnings("unused")
+			String file=null;
 	        for(int i=0;;i++){
 	          in.read(buf, i, 1);
 	          if(buf[i]==(byte)0x0a){

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
@@ -18,12 +17,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.osgi.framework.Bundle;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
@@ -32,7 +27,7 @@ import tailorswift.Activator;
 
 public class WebScaldingProjectSupport {
 
-	private ExecuteCommand command = new ExecuteCommand();
+	
 
 	/**
 	 * For this marvelous project we need to: - create the default Eclipse
@@ -67,7 +62,7 @@ public class WebScaldingProjectSupport {
 
 	public void runWithProgressMonitor(final String absolutePath,
 			final String projectName, IProgressMonitor monitor) {
-		Job job = new Job("Generate a template Webscalding  project") {
+		Job job = new JobWithResult("Create Webscalding  project") {
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Creating a webscalding project..", 100);
 				try {
@@ -105,15 +100,6 @@ public class WebScaldingProjectSupport {
 
 			}
 		};
-		  job.addJobChangeListener(new JobChangeAdapter() {
-		        public void done(IJobChangeEvent event) {
-		        if (event.getResult().isOK())
-		          command.openInfo("Job completed successfully", "WebScalding Project Creation", IStatus.INFO);
-		           else
-		        	   command.openInfo("Job failed, check error log for details", "WebScalding Project Creation", IStatus.ERROR);
-		        }
-		     });
-		  job.setUser(true);
 		job.schedule();
 
 

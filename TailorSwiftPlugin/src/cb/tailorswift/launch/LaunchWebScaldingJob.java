@@ -8,15 +8,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 import tailorswift.Activator;
 import cb.tailorswift.behavior.ExecuteCommand;
+import cb.tailorswift.behavior.JobWithResult;
 import cb.tailorswift.behavior.WebScaldingProjectSupport;
 import cb.tailorswift.ssh.FileTransfer;
 import cb.tailorswift.ssh.SSHCommand;
@@ -32,7 +31,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
 	public void runWithProgressMonitor(
 			final ILaunchConfiguration configuration, IProgressMonitor monitor) {
-		Job job = new Job("Running Webscalding  project") {
+		Job job = new JobWithResult("Running Webscalding  project") {
 			
 
 			protected IStatus run(IProgressMonitor monitor) {
@@ -133,15 +132,6 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 			}
 
 		};
-		  job.addJobChangeListener(new JobChangeAdapter() {
-		        public void done(IJobChangeEvent event) {
-		        if (event.getResult().isOK())
-		          command.openInfo("Job completed successfully", "Job Submission", IStatus.INFO);
-		           else
-		        	   command.openInfo("Job failed, check error log for details", "Job Submission", IStatus.ERROR);
-		        }
-		     });
-		  job.setUser(true);
 		job.schedule();
 
 	}
