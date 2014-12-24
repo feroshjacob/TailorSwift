@@ -2,12 +2,14 @@ package cb.tailorswift.wizards;
 
 import java.net.URI;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
+import cb.tailorswift.behavior.ExecuteCommand;
 import cb.tailorswift.behavior.WebScaldingProjectSupport;
 
 public class WebScaldingNewProject extends Wizard implements INewWizard {
@@ -35,7 +37,11 @@ public class WebScaldingNewProject extends Wizard implements INewWizard {
 		    } // else location == null
 		 
 		    WebScaldingProjectSupport project= new WebScaldingProjectSupport();
-		    project.createProject(name, location);
+		    try {
+				project.createProject(name, location);
+			} catch (CoreException e) {
+			 new ExecuteCommand().logError(e, "Project creation");	
+			}
 		    return true;
 	}
 	@Override

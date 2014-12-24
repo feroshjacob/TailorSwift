@@ -8,13 +8,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 import tailorswift.Activator;
-import cb.tailorswift.behavior.ExcecuteCommand;
+import cb.tailorswift.behavior.ExecuteCommand;
 import cb.tailorswift.behavior.WebScaldingProjectSupport;
 import cb.tailorswift.ssh.FileTransfer;
 import cb.tailorswift.ssh.SSHCommand;
@@ -25,12 +27,14 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
 	public static final String SCRIPT_PATH = "SCRIPT_PATH";
 	public static final String PROJECT_NAME = "PROJECT_NAME";
-	ExcecuteCommand command = new ExcecuteCommand();
+	final ExecuteCommand command = new ExecuteCommand();
 	WebScaldingProjectSupport support = new WebScaldingProjectSupport();
 
 	public void runWithProgressMonitor(
 			final ILaunchConfiguration configuration, IProgressMonitor monitor) {
 		Job job = new Job("Running Webscalding  project") {
+			
+
 			protected IStatus run(IProgressMonitor monitor) {
 
 				IStatus status = null;
@@ -46,12 +50,12 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 					monitor.worked(10);
 					status = Status.OK_STATUS;
 					monitor.done();
-					command.openInfo("Job submitted successfully", "WebScalding job submission");
+		//			command.openInfo("Job submitted successfully", "WebScalding job submission");
 
 				} catch (IOException | InterruptedException | CoreException
 						| JSchException e) {
 					// TODO Auto-generated catch block
-					command.openError(e, "Job submission failed!");
+		//			command.openError(e, "Job submission failed!");
 					status = Status.CANCEL_STATUS;
 
 				}
@@ -79,7 +83,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 				// fjacob.site@qtmhgate1.atl.careerbuilder.com:
 				FileTransfer ft = new FileTransfer(Activator.getSSHUserName(),
 						Activator.getSSHHostName(), Activator.getSSHPassword());
-				ft.transferFile(file, file.getName());
+				ft.transferToServer(file, file.getName());
 
 			}
 
@@ -129,7 +133,15 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 			}
 
 		};
-		job.setUser(true);
+		  job.addJobChangeListener(new JobChangeAdapter() {
+		        public void done(IJobChangeEvent event) {
+		        if (event.getResult().isOK())
+		          command.openInfo("Job completed successfully", "Job Submission", IStatus.INFO);
+		           else
+		        	   command.openInfo("Job failed, check error log for details", "Job Submission", IStatus.ERROR);
+		        }
+		     });
+		  job.setUser(true);
 		job.schedule();
 
 	}

@@ -30,7 +30,7 @@ public class FileTransferTest extends BasicSSHTest{
 			String hostName =userInfo.get(1);
 			String passWord =userInfo.get(2);
 			FileTransfer ft = new FileTransfer(userName, hostName, passWord);
-			ft.transferFile(new File("/Users/fjacob/dump/runtime-EclipseApplication/WordCount/target/scala-2.10/WordCount-assembly-0.0.1.jar"), "WordCount-assembly-0.0.1.jar");
+			ft.transferToServer(new File("/Users/fjacob/dump/runtime-EclipseApplication/WordCount/target/scala-2.10/WordCount-assembly-0.0.1.jar"), "WordCount-assembly-0.0.1.jar");
 			//transferFile( new File(".project"), "project");
 		} catch (IOException | JSchException e) {
 			// TODO Auto-generated catch block

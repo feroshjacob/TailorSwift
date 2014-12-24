@@ -28,7 +28,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 
 import tailorswift.Activator;
 
-public class ExcecuteCommand {
+public class ExecuteCommand {
 	
 
 
@@ -92,24 +92,15 @@ public class ExcecuteCommand {
 		conMan.addConsoles(new IConsole[]{myConsole});
 		return myConsole;
 	}
-	public   void openError(Exception ex, final String title) {
+	public   void logError(Exception ex, final String title) {
 		final String message = ex.getMessage();
 		final String formattedMessage = Activator.PLUGIN_ID + " : " + message; //$NON-NLS-1$
 		final Status status = new Status(IStatus.ERROR,Activator. PLUGIN_ID, formattedMessage, ex);
 
 		Activator.getDefault().getLog().log(status);
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				ErrorDialog.openError(Display.getDefault().getActiveShell(),
-						title, message, status);
-			}
-		});
-	}
-	public   void openInfo(final String message, final String title) {
-		final Status status = new Status(IStatus.INFO,Activator. PLUGIN_ID, message);
-
-		Activator.getDefault().getLog().log(status);
+    }
+	public   void openInfo(final String message, final String title, int statusCode) {
+			
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {

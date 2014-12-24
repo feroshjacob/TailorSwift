@@ -61,6 +61,45 @@
     		class="cb.tailorswift.preferences.TailorSwiftPreferencePage">
    	</page> 
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+         <command
+               commandId="TailorSwiftPlugin.synchronizeNoHupOut"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     ifEmpty="false">
+                  <adapt
+                        type="org.eclipse.core.resources.IResource">
+                     <test
+                           property="org.eclipse.core.resources.name"
+                           value="nohup.out">
+                     </test>
+                  </adapt>
+               </iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="cb.tailorswift.commands.SynchronizeCommand"
+            id="TailorSwiftPlugin.synchronizeNoHupOut"
+            name="Update with server">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="cb.tailorswift.commands.SynchronizeCommand"
+            commandId="TailorSwiftPlugin.synchronizeNoHupOut">
+      </handler>
+   </extension>
 
 
 </plugin>
