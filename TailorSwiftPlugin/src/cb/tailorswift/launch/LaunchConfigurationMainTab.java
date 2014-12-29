@@ -35,6 +35,9 @@ public class LaunchConfigurationMainTab extends AbstractLaunchConfigurationTab {
     private Button fileButton;
     private Button projectButton;
     private Text projectText;
+    private Button needsBuild;
+    private Button needsClean;
+    
 
     /**
      * @wbp.parser.entryPoint (non-Javadoc)
@@ -47,10 +50,46 @@ public class LaunchConfigurationMainTab extends AbstractLaunchConfigurationTab {
         Composite comp = createComposite(parent, font, 1, 1, GridData.FILL_BOTH);
         createProjectGroup(comp);
         createFileGroup(comp);
-        
+        createOtherOpts(comp);
         setControl(comp);
 
     }
+
+	protected void createOtherOpts(Composite parent) {
+		
+        Group projectGroup = new Group(parent, SWT.NONE);
+        projectGroup.setText("Other options");
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        projectGroup.setLayoutData(gd);
+        GridLayout layout = new GridLayout();
+        layout.numColumns = 2;
+        projectGroup.setLayout(layout);
+        projectGroup.setFont(parent.getFont());
+        
+		needsBuild = createCheckButton(projectGroup, "Needs rebuild"); //$NON-NLS-1$
+        needsBuild.setSelection(true);
+         gd = new GridData(GridData.FILL_HORIZONTAL);
+         needsBuild.setLayoutData(gd);
+         needsBuild.addSelectionListener(new SelectionAdapter() {
+        	 public void widgetSelected(SelectionEvent e) {
+             	if(needsBuild.getSelection()== false && needsClean.getSelection()==true )
+             		needsClean.setSelection(false);
+             }
+        	 
+		});
+         
+         needsClean = createCheckButton(projectGroup, "Needs clean"); //$NON-NLS-1$
+         needsClean.setSelection(true);
+         needsClean.setLayoutData(gd);
+         needsClean.addSelectionListener(new SelectionAdapter() {
+        	 public void widgetSelected(SelectionEvent e) {
+             	if(needsBuild.getSelection()== false && needsClean.getSelection()==true )
+             		needsBuild.setSelection(true);
+             }
+        	 
+		});
+
+	}
 
     private void createProjectGroup(Composite parent) {
         Group projectGroup = new Group(parent, SWT.NONE);
@@ -185,6 +224,9 @@ public class LaunchConfigurationMainTab extends AbstractLaunchConfigurationTab {
         }
         configuration.setAttribute(LaunchWebScaldingJob.SCRIPT_PATH, file);
         configuration.setAttribute(LaunchWebScaldingJob.PROJECT_NAME, project);
+        configuration.setAttribute(LaunchWebScaldingJob.NEEDS_BUILD, needsBuild.getSelection());
+        configuration.setAttribute(LaunchWebScaldingJob.NEEDS_CLEAN, needsClean.getSelection());
+        
     }
 
     /**
