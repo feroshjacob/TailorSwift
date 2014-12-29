@@ -53,10 +53,9 @@ public class WebScaldingProjectSupport {
 	public String getProjectAbsolutePath(String projectFolder) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-		// get location of workspace (java.io.File)
-		IPath workspaceDirectory = workspace.getRoot().getLocation();
-		IPath path = workspaceDirectory.append(projectFolder);
-		String absolutePath = path.toFile().getAbsolutePath();
+		IProject newProject = workspace.getRoot().getProject(projectFolder);
+
+		String absolutePath =newProject.getLocation().toFile().getAbsolutePath();
 		return absolutePath;
 	}
 
