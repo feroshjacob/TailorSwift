@@ -48,6 +48,7 @@ Have fun!
 <b> Errors and fixes </b>
 
 1.  <i>java.util.concurrent.ExecutionException: java.lang.OutOfMemoryError: Java heap space </i>
-      Update -mem argument in the sbtopt file in the sbt installation directory. e.g., "-mem   23000"  
+
+     Update -mem argument in the sbtopt file in the sbt installation directory. e.g., "-mem   23000"  
 
 
