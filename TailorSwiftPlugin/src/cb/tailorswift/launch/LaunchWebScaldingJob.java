@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -44,7 +45,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 				IStatus status = null;
 				try {
 					monitor.beginTask("Submitting Scalding Job", 100);
-					uploadScript(configuration);
+					uploadScript(configuration, new SubProgressMonitor(monitor, 10));
 					
 					monitor.worked(10);
 				   if( configuration.getAttribute(NEEDS_CLEAN, true))
@@ -54,7 +55,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 					   sbtAssemblyProject(configuration);
 					monitor.worked(40);
 				   if( configuration.getAttribute(NEEDS_BUILD, true))
-					uploadAssembly(configuration);
+					uploadAssembly(configuration,new SubProgressMonitor(monitor, 30));
 					monitor.worked(30);
 					submitJob(configuration);
 					monitor.worked(10);
@@ -98,17 +99,17 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
 			}
 			
-			private void uploadResource(File file) throws CoreException,
+			private void uploadResource(File file, IProgressMonitor monitor) throws CoreException,
 					IOException, InterruptedException, JSchException {
 
 		
 				FileTransfer ft = new FileTransfer(Activator.getSSHUserName(),
 						Activator.getSSHHostName(), Activator.getSSHPassword());
-				ft.transferToServer(file, file.getName());
+				ft.transferToServer(file, file.getName(), monitor);
 
 			}
 
-			private void uploadAssembly(ILaunchConfiguration configuration)
+			private void uploadAssembly(ILaunchConfiguration configuration,  IProgressMonitor monitor)
 					throws CoreException, IOException, InterruptedException,
 					JSchException {
 				String projectName = configuration.getAttribute(PROJECT_NAME,
@@ -117,18 +118,18 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 						+ File.separator + "target" + File.separator
 						+ "scala-2.10" + File.separator + projectName
 						+ "-assembly-0.0.1.jar";
-				uploadResource(new File(path));
+				uploadResource(new File(path), monitor);
 
 			}
 
-			private void uploadScript(ILaunchConfiguration configuration)
+			private void uploadScript(ILaunchConfiguration configuration, IProgressMonitor monitor)
 					throws CoreException, IOException, InterruptedException,
 					JSchException {
 				String scriptFile = configuration.getAttribute(SCRIPT_PATH, "");
 				String scriptPath = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(scriptFile))
 						.getLocation().toFile().getAbsolutePath();
 						
-				uploadResource(new File(scriptPath));
+				uploadResource(new File(scriptPath),monitor);
 
 			}
 
