@@ -20,7 +20,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="cb.tailorswift.launch.LaunchWebScaldingJob"
+            delegate="cb.tailorswift.launch.LaunchWebScalding"
             id="TailorSwift.launchWebScaldingConfiguration"
             modes="run,debug"
             name="%launchConfigurationType.name"
@@ -100,31 +100,28 @@
       </handler>
    </extension>
    <extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
-            delegate="org.eclipse.jdt.internal.launching.CustomJavaAppletLaunchConfigurationDelegate"
-            id="org.eclipse.jdt.launching.javaApplet1"
-            modes="run,debug"
-            name="Java Applet"
-            public="true"
-            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
-      </launchConfigurationType>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-      <launchConfigurationTabGroup
-            class="org.eclipse.jdt.internal.launching.CustomJavaAppletTabGroup"
-            id="org.eclipse.jdt.debug.ui.launchConfigurationTabGroup.javaApplet"
-            type="org.eclipse.jdt.launching.javaApplet1">
-      </launchConfigurationTabGroup>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-      <launchConfigurationTypeImage
-            configTypeID="org.eclipse.jdt.launching.javaApplet1"
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="cb.tailorswift.launchshortcut.WebScaldingShortCut"
             icon="icons/sample.gif"
-            id="TailorSwiftPlugin.launchConfigurationTypeImage1">
-      </launchConfigurationTypeImage>
+            id="cb.tailorswift.launchshortcut"
+            label="Web Scalding"
+            modes="run">
+                    <contextualLaunch>
+           <contextLabel label="Launch Webscalding" mode="run"/>
+           <enablement>
+              <count value="1"/>
+              <iterate>
+                 <or>
+                    <adapt type="org.eclipse.jdt.core.ICompilationUnit" />
+                    <adapt type="org.eclipse.core.resources.IProject">
+                       <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.m2e.core.maven2Nature"/>
+                    </adapt>
+                 </or>
+              </iterate>
+           </enablement>
+       </contextualLaunch>
+             </shortcut>
    </extension>
 
 

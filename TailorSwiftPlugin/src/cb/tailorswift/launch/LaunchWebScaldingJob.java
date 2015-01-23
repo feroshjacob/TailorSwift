@@ -83,7 +83,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
 				command.executeCommand(new String[] { Activator.getSBTPath(),
 						"-Dsbt.log.noformat=true",  "assembly" },
-						support.getProjectAbsolutePath(projectName));
+						Activator.getProjectAbsolutePath(projectName));
 
 			}
 			private void sbtCleanProject(
@@ -95,7 +95,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 
 				command.executeCommand(new String[] { Activator.getSBTPath(),
 						"-Dsbt.log.noformat=true",  "clean" },
-						support.getProjectAbsolutePath(projectName));
+						Activator.getProjectAbsolutePath(projectName));
 
 			}
 			
@@ -114,7 +114,7 @@ public class LaunchWebScaldingJob implements ILaunchConfigurationDelegate {
 					JSchException {
 				String projectName = configuration.getAttribute(PROJECT_NAME,
 						"");
-				String path = support.getProjectAbsolutePath(projectName)
+				String path = Activator.getProjectAbsolutePath(projectName)
 						+ File.separator + "target" + File.separator
 						+ "scala-2.10" + File.separator + projectName
 						+ "-assembly-0.0.1.jar";

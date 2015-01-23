@@ -45,19 +45,12 @@ public class WebScaldingProjectSupport {
 		Assert.isTrue(projectName.trim().length() > 0);
 
 		createBaseProject(projectName, location);
-		String absolutePath = getProjectAbsolutePath(projectName);
+		String absolutePath = Activator.getProjectAbsolutePath(projectName);
 		runWithProgressMonitor(absolutePath, projectName, null);
 
 	}
 
-	public String getProjectAbsolutePath(String projectFolder) {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-		IProject newProject = workspace.getRoot().getProject(projectFolder);
-
-		String absolutePath =newProject.getLocation().toFile().getAbsolutePath();
-		return absolutePath;
-	}
 
 	public void runWithProgressMonitor(final String absolutePath,
 			final String projectName, IProgressMonitor monitor) {
