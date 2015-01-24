@@ -30,7 +30,7 @@ import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
 
 public class LaunchConfigurationMainTab extends AbstractLaunchConfigurationTab {
 
-    public static final String MAIN_TAB_NAME = "Main";
+    public static final String MAIN_TAB_NAME = "WebscaldingMain";
     private Text fileText;
     private Button fileButton;
     private Button projectButton;

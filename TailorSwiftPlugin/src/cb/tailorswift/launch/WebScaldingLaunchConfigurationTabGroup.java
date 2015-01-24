@@ -13,7 +13,8 @@ public class WebScaldingLaunchConfigurationTabGroup extends
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-				new LaunchConfigurationMainTab(),
+			//	new LaunchConfigurationMainTab(),
+		//		new WebScaldingLaunchTab(),
 				new CommonTab()
 		};
 		setTabs(tabs);
