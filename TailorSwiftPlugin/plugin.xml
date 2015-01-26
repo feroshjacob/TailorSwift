@@ -132,6 +132,16 @@
             name="WebscaldingLaunch_tab">
       </tab>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="tailorswift.category.wizards"
+            class="cb.tailorswift.wizards.WebScaldingNewMavenProject"
+            id="cb.tailorswift.mavenproject"
+            name="Webscalding Project (Maven)"
+            project="true">
+      </wizard>
+   </extension>
 
 
 </plugin>

@@ -16,7 +16,7 @@ public class WebScaldingNewProject extends Wizard implements INewWizard {
 	
 	private WizardNewProjectCreationPage _pageOne;
 	
-	private static String WIZARD_NAME ="New WebScalding Project";
+	private static String WIZARD_NAME ="New WebScalding Project (SBT)";
 
 	public WebScaldingNewProject() {
 		  setWindowTitle(WIZARD_NAME);

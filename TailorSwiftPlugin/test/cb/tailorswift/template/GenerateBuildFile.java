@@ -52,5 +52,22 @@ public class GenerateBuildFile {
 	  
 		
 	}
-
+	@Test
+	public void testScriptPOM() throws IOException {
+	//	URL fileURL =  new URL("platform:/plugin/"+ Activator.PLUGIN_ID+"/resources/jobtemplate.zip");
+	//	STGroup group = new STGroupFile(fileURL,"UTF-8", '<', '>');
+		STGroup group = new STGroupFile("resources/pom.stg", '$', '$');
+	//	 System.out.println(group.encoding);
+		ST st = group.getInstanceOf("pomfile");
+		//List<String> names =  new ArrayList<String>();
+		st.add("version", "0.0.1");
+		st.add("artifactId", "someother");
+		st.add("groupId", "com.recipegrace");
+	
+	
+		
+	 System.out.println(st.render());
+	  
+		
+	}
 }
