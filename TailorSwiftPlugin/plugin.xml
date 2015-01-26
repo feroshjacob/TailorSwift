@@ -126,7 +126,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
-            class="cb.tailorswift.launch.WebScaldingLaunchTab"
+            class="cb.tailorswift.launch.ui.WebScaldingLaunchTab"
             group="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
             id="cb.tailorswift.launch.WebScaldingLaunchTab"
             name="WebscaldingLaunch_tab">

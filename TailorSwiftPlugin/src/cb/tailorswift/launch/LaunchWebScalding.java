@@ -77,21 +77,8 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 
 		try {
 
-			this.launchSupport = MavenRuntimeLaunchSupport.create(configuration, launch, monitor);
-			this.extensionsSupport = MavenLaunchExtensionsSupport.create(configuration, launch);
-
-			ILaunchConfigurationWorkingCopy workingCopy= configuration.getWorkingCopy();
-
-			workingCopy.setAttribute(ATTR_POM_DIR, getProjectPath(configuration));
-			workingCopy.setAttribute(ATTR_GOALS, "clean package");
-			workingCopy.setAttribute(ATTR_SKIP_TESTS, true);
-
-			workingCopy.setAttribute(IDebugUIConstants.ATTR_PRIVATE, true);
-			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE, "${project}"); //$NON-NLS-1$
-			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_RECURSIVE, true);
-	
-
-			extensionsSupport.configureSourceLookup(workingCopy, launch, monitor);
+			ILaunchConfigurationWorkingCopy workingCopy = launchMavenJob(
+					configuration, launch, monitor);
 
 			super.launch(workingCopy, mode, launch, monitor);
 		} finally {
@@ -100,6 +87,27 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 			this.launchSupport = null;
 			this.extensionsSupport = null;
 		}
+	}
+
+	protected ILaunchConfigurationWorkingCopy launchMavenJob(
+			ILaunchConfiguration configuration, ILaunch launch,
+			IProgressMonitor monitor) throws CoreException {
+		this.launchSupport = MavenRuntimeLaunchSupport.create(configuration, launch, monitor);
+		this.extensionsSupport = MavenLaunchExtensionsSupport.create(configuration, launch);
+
+		ILaunchConfigurationWorkingCopy workingCopy= configuration.getWorkingCopy();
+
+		workingCopy.setAttribute(ATTR_POM_DIR, getProjectPath(configuration));
+		workingCopy.setAttribute(ATTR_GOALS, "clean package");
+		workingCopy.setAttribute(ATTR_SKIP_TESTS, true);
+
+		workingCopy.setAttribute(IDebugUIConstants.ATTR_PRIVATE, true);
+		workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE, "${project}"); //$NON-NLS-1$
+		workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_RECURSIVE, true);
+
+
+		extensionsSupport.configureSourceLookup(workingCopy, launch, monitor);
+		return workingCopy;
 	}
 
 	public IVMRunner getVMRunner(final ILaunchConfiguration configuration, String mode) throws CoreException {
