@@ -26,7 +26,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/jsch-0.1.51.jar,
  lib/antlr-4.4-complete.jar
-Export-Package: cb.tailorswift.behavior,
- cb.tailorswift.launch,
- cb.tailorswift.wizards,
+Export-Package: 
+ com.recipegrace.tailorswift.common,
+ com.recipegrace.tailorswift.launch,
  tailorswift

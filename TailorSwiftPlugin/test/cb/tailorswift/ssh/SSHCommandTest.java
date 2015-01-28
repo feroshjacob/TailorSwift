@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.jcraft.jsch.JSchException;
+import com.recipegrace.tailorswift.ssh.SSHCommand;
 
 public class SSHCommandTest extends BasicSSHTest {
 

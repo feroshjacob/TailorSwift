@@ -1,22 +1,12 @@
 package cb.tailorswift.template;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.junit.Test;
-import org.stringtemplate.v4.AutoIndentWriter;
-import org.stringtemplate.v4.NoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
-import org.stringtemplate.v4.STWriter;
-
-import tailorswift.Activator;
 
 public class GenerateBuildFile {
 
@@ -32,7 +22,7 @@ public class GenerateBuildFile {
 	
 	
 		
-	  st.write(new File("hello.txt"), null);
+	  st.write(new File(".tests/hello.txt"), null);
 	  
 		
 	}
@@ -58,10 +48,10 @@ public class GenerateBuildFile {
 	//	STGroup group = new STGroupFile(fileURL,"UTF-8", '<', '>');
 		STGroup group = new STGroupFile("resources/pom.stg", '$', '$');
 	//	 System.out.println(group.encoding);
-		ST st = group.getInstanceOf("pomfile");
+		ST st = group.getInstanceOf("template");
 		//List<String> names =  new ArrayList<String>();
 		st.add("version", "0.0.1");
-		st.add("artifactId", "someother");
+		st.add("project", "someother");
 		st.add("groupId", "com.recipegrace");
 	
 	
