@@ -85,32 +85,8 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 
 			super.launch(workingCopy, mode, launch, monitor);
 		
-            ILaunchesListener2 launchListener = new ILaunchesListener2() {
-				
-				@Override
-				public void launchesRemoved(ILaunch[] launches) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void launchesChanged(ILaunch[] launches) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void launchesAdded(ILaunch[] launches) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void launchesTerminated(ILaunch[] launches) {
-					command.openInfo("Hello World", "SSS", IStatus.INFO);
-					
-				}
-			};
+     
+			ILaunchesListener2 launchListener = new WebScaldingMavenLaunchListener(configuration); 
             DebugPlugin.getDefault().getLaunchManager().addLaunches(new ILaunch[] {launch});
             DebugPlugin.getDefault().getLaunchManager().addLaunchListener(launchListener);
             
