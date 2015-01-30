@@ -1,6 +1,6 @@
 package com.recipegrace.tailorswift.launchshortcut;
 
-import static com.recipegrace.tailorswift.common.ScalaParsingHelper.getWebScaldingJobClass;
+import static com.recipegrace.tailorswift.common.ScalaParsingHelper.getOneWebScaldingJobClass;
 import static com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab.*;
 
 
@@ -55,7 +55,7 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 				
 					try {
 						
-						ScalaClassElement element=	getWebScaldingJobClass(scalaSourceFile);
+						ScalaClassElement element=	getOneWebScaldingJobClass(scalaSourceFile);
 						if(element==null) {
 							command.openInfo("No websclading job", "Launch failed" ,IStatus.ERROR);
 						}
@@ -83,7 +83,7 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 	            	ScalaSourceFile scalaSourceFile = (ScalaSourceFile)compilationUnit;
 	            	ScalaClassElement element;
 					try {
-						element = getWebScaldingJobClass(scalaSourceFile);
+						element = getOneWebScaldingJobClass(scalaSourceFile);
 						 launch(element, mode);
 					} catch (CoreException e) {
 						// TODO Auto-generated catch block

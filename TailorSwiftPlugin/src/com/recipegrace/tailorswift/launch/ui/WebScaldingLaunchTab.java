@@ -1,5 +1,7 @@
 package com.recipegrace.tailorswift.launch.ui;
 
+import static com.recipegrace.tailorswift.common.ScalaParsingHelper.findWebScaldingJobClasses;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,11 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaModel;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.debug.ui.launcher.DebugTypeSelectionDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -38,8 +36,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
-
-import static com.recipegrace.tailorswift.common.ScalaParsingHelper.*;
 
 @SuppressWarnings("restriction")
 public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
@@ -116,25 +112,11 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				IJavaElement[] scope= null;
-				IJavaModel javaModel =  JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
+
 				String projectName = txtProject.getText();
-				IJavaProject project = javaModel.getJavaProject(projectName);
-				if (project == null) {
-					try {
-						scope = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects();
-					}
-					catch (JavaModelException ex) {
-						setErrorMessage(ex.getMessage());
-						return;
-					}
-				}
-				else {
-					scope = new IJavaElement[]{project};
-				}
 				IType[] types = null;
 				try {
-					types = findWebScaldingJobClasses(getLaunchConfigurationDialog(), scope);
+					types = findWebScaldingJobClasses(getLaunchConfigurationDialog(), projectName);
 				} 
 				catch (InterruptedException ex) {return;} 
 				catch (InvocationTargetException ex) {
@@ -420,6 +402,10 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
 			
+			
+			    txtMainClass.setText( configuration.getAttribute(WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME, ""));
+			    txtProject.setText( configuration.getAttribute(WEBSCALDING_LAUNCH_PROJECT_NAME, ""));
+			    
 				String  programArgumentsString = configuration.getAttribute(WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS, "");
 				programArguments = KeyValuePair.parseString(programArgumentsString);
 				argumentsLV.setInput(programArguments);
