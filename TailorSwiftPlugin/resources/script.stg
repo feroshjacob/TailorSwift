@@ -1,0 +1,3 @@
+template(executable,arguments,main,options) ::=<<#!/bin/bash
+hadoop jar <executable> <options:{u|-D<u.name>=<u.value> }> <main> --hdfs <arguments:{u|--<u.name> <u.value> }> 
+>>

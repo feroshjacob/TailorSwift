@@ -1,18 +1,31 @@
 package com.recipegrace.tailorswift.launch.ui;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaModel;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.debug.ui.launcher.DebugTypeSelectionDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -24,13 +37,23 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
 
+import static com.recipegrace.tailorswift.common.ScalaParsingHelper.*;
+
+@SuppressWarnings("restriction")
 public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 
 	public static final String TAB_NAME = "WebscaldingLaunch_tab";
-	public static final String WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS="WEBSCALDING_PROGRAM_ARGUMENTS";
-	public static final String WEBSCALDING_LAUNCH_PROGRAM_OPTIONS="WEBSCALDING_PROGRAM_OPTIONS";
-	private Text text;
+	public static final String WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS="WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS";
+	public static final String WEBSCALDING_LAUNCH_PROGRAM_OPTIONS="WEBSCALDING_LAUNCH_PROGRAM_OPTIONS";
+	public static final String WEBSCALDING_LAUNCH_JOB_CLASS_NAME="WEBSCALDING_LAUNCH_JOB_CLASS_NAME";
+	public static final String WEBSCALDING_LAUNCH_PROJECT_NAME="WEBSCALDING_LAUNCH_PROJECT_NAME";
+	public static final String WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME= "WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME";
+
+	
+	private Text txtMainClass;
+	private Text txtProject;
 
 	private ListViewer optionsLV;
 	private ListViewer argumentsLV;
@@ -45,23 +68,95 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		Composite comp = createComposite(parent, font, 1, 1, GridData.FILL_BOTH);
 		comp.setLayout(new GridLayout(3, false));
 
+
+		
+		Label lblProject = new Label(comp, SWT.NONE);
+		lblProject.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblProject.setText("Project");
+		
+		txtProject = new Text(comp, SWT.BORDER);
+		txtProject.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+	
+		Button btnProjectSearch = new Button(comp, SWT.NONE);
+		btnProjectSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
+		btnProjectSearch.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+		        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		        ResourceListSelectionDialog dialog = new ResourceListSelectionDialog(getShell(), root,IResource.PROJECT);
+		        dialog.setTitle("Search");
+		        if (dialog.open() == Window.OK) {
+		            Object[] files = dialog.getResult();
+		           
+		            	IProject project = (IProject) files[0];
+		            txtProject.setText(project.getName());
+		            
+		        }
+			}
+		});
+		btnProjectSearch.setText("Search");
+		
 		Label lblMainClass = new Label(comp, SWT.NONE);
 		lblMainClass.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
 		lblMainClass.setText("Main class");
 
-		text = new Text(comp, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+	
+		txtMainClass = new Text(comp, SWT.BORDER);
+		txtMainClass.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-		Button btnSearch = new Button(comp, SWT.NONE);
-		btnSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+
+		Button btnMainClassSearch = new Button(comp, SWT.NONE);
+		btnMainClassSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		btnSearch.addSelectionListener(new SelectionAdapter() {
+		btnMainClassSearch.addSelectionListener(new SelectionAdapter() {
+		
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
+				IJavaElement[] scope= null;
+				IJavaModel javaModel =  JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
+				String projectName = txtProject.getText();
+				IJavaProject project = javaModel.getJavaProject(projectName);
+				if (project == null) {
+					try {
+						scope = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects();
+					}
+					catch (JavaModelException ex) {
+						setErrorMessage(ex.getMessage());
+						return;
+					}
+				}
+				else {
+					scope = new IJavaElement[]{project};
+				}
+				IType[] types = null;
+				try {
+					types = findWebScaldingJobClasses(getLaunchConfigurationDialog(), scope);
+				} 
+				catch (InterruptedException ex) {return;} 
+				catch (InvocationTargetException ex) {
+					setErrorMessage(ex.getTargetException().getMessage());
+					return;
+				} catch (JavaModelException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				DebugTypeSelectionDialog dialog = new DebugTypeSelectionDialog(getShell(), types, "Select one Job"); 
+				if (dialog.open() == Window.CANCEL) {
+					return;
+				}
+				Object[] results = dialog.getResult();	
+				IType type = (IType)results[0];
+				if (type != null) {
+					txtMainClass.setText(type.getFullyQualifiedName());
+					txtProject.setText(type.getJavaProject().getElementName());
+				}
 			}
 		});
-		btnSearch.setText("Search");
+		btnMainClassSearch.setText("Search");
 
 		Label lblOptions = new Label(comp, SWT.NONE);
 		lblOptions.setText("Options");

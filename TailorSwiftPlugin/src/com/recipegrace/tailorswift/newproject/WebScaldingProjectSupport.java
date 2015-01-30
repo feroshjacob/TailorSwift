@@ -1,12 +1,10 @@
 package com.recipegrace.tailorswift.newproject;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -20,14 +18,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.PartInitException;
-import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupFile;
+
+import tailorswift.Activator;
 
 import com.recipegrace.tailorswift.common.JobWithResult;
 import com.recipegrace.tailorswift.common.UnZip;
-
-import tailorswift.Activator;
 
 public abstract class WebScaldingProjectSupport {
 
@@ -116,34 +111,8 @@ public abstract class WebScaldingProjectSupport {
 	}
 
 
-	protected void overwriteFile(String templateName, String newFile,
-			Map<String,String> properties) throws IOException {
-
-		URL fileURL = new URL("platform:/plugin/" + Activator.PLUGIN_ID
-				+ "/resources/" + templateName);
-		STGroup group = new STGroupFile(fileURL, "UTF-8", getTemplateStartChar(), getTemplateEndChar());
-		ST st = group.getInstanceOf("template");
-		for(String key: properties.keySet()) {
-			st.add(key, properties.get(key));	
-		}
-		
-		String fullPath = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(projectName).getLocation().toFile()
-				.getAbsolutePath()
-				+ File.separator + newFile;
-		st.write(new File(fullPath), null);
-
-	}
 
 
-	protected char getTemplateEndChar() {
-		return '>';
-	}
-
-
-	protected char getTemplateStartChar() {
-		return '<';
-	}
 
 	/**
 	 * Just do the basics: create a basic project.

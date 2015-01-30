@@ -1,5 +1,6 @@
 package com.recipegrace.tailorswift.newproject;
 
+import static com.recipegrace.tailorswift.common.ITemplateConstants.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,8 +15,11 @@ import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.ui.PartInitException;
 
+import com.recipegrace.tailorswift.common.ApplyTemplate;
+
 @SuppressWarnings("restriction")
 public class MavenProjectSupport extends WebScaldingProjectSupport {
+
 
 	private String version,groupId;
 	public MavenProjectSupport(String projectName, String version, String groupId) {
@@ -66,25 +70,18 @@ public class MavenProjectSupport extends WebScaldingProjectSupport {
 		return "/resources/maventemplate.zip";
 	} 
 	private void applyTemplates() throws IOException {
-		overwriteFile("pom.stg", "pom.xml",getProperties());
+		ApplyTemplate templates = new ApplyTemplate('$','$', "template");
+		templates.overwriteFile("pom.stg", "pom.xml",getProperties(),getProjectName());
 		
 	}
 
-	private Map<String, String> getProperties() {
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("project", getProjectName().toLowerCase());
-		properties.put("groupId", groupId.toLowerCase());
-		properties.put("version", version);
+	private Map<String, Object> getProperties() {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(TEMPLATE_VARIABLE_PROJECT, getProjectName().toLowerCase());
+		properties.put(TEMPLATE_VARIABLE_GROUP_ID, groupId.toLowerCase());
+		properties.put(TEMPLATE_VARIABLE_VERSION, version);
 		return properties;
 
-	}
-	protected char getTemplateEndChar() {
-		return '$';
-	}
-
-
-	protected char getTemplateStartChar() {
-		return '$';
 	}
 
 }

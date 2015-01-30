@@ -24,7 +24,7 @@ public class ApplyTemplate {
 	}
 	
 	public void overwriteFile(String templateName, String newFile,
-			Map<String,String> properties,String projectName) throws IOException {
+			Map<String,Object> properties,String projectName) throws IOException {
 
 		URL fileURL = new URL("platform:/plugin/" + Activator.PLUGIN_ID
 				+ "/resources/" + templateName);

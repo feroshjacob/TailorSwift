@@ -40,7 +40,7 @@ import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
 import com.recipegrace.tailorswift.common.ExecuteCommand;
 
 import tailorswift.Activator;
-
+import static com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab.*;
 
 
 
@@ -63,11 +63,11 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 
 	private MavenLaunchExtensionsSupport extensionsSupport;
 
-	public static final String PROJECT_NAME = "PROJECT_NAME";
+	
 
 
 	private String getProjectPath(ILaunchConfiguration configuration) throws CoreException {
-		String projectName = configuration.getAttribute(PROJECT_NAME,"");
+		String projectName = configuration.getAttribute(WEBSCALDING_LAUNCH_PROJECT_NAME,"");
 		return Activator.getProjectAbsolutePath(projectName);
 
 	}
@@ -260,17 +260,6 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 		if(settings != null && settings.trim().length() > 0) {
 			sb.append(" -s ").append(quote(settings)); //$NON-NLS-1$
 		}
-
-		// boolean b = preferenceStore.getBoolean(MavenPreferenceConstants.P_CHECK_LATEST_PLUGIN_VERSION);
-		// sb.append(" -D").append(MavenPreferenceConstants.P_CHECK_LATEST_PLUGIN_VERSION).append("=").append(b);
-
-		// b = preferenceStore.getBoolean(MavenPreferenceConstants.P_UPDATE_SNAPSHOTS);
-		// sb.append(" -D").append(MavenPreferenceConstants.P_UPDATE_SNAPSHOTS).append("=").append(b);
-
-		// String s = preferenceStore.getString(MavenPreferenceConstants.P_GLOBAL_CHECKSUM_POLICY);
-		// if(s != null && s.trim().length() > 0) {
-		//   sb.append(" -D").append(MavenPreferenceConstants.P_GLOBAL_CHECKSUM_POLICY).append("=").append(s);
-		// }
 
 		return sb.toString();
 	}

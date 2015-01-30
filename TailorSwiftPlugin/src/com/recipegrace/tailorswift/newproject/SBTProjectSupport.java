@@ -1,6 +1,5 @@
 package com.recipegrace.tailorswift.newproject;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,9 +9,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.PartInitException;
 
-import com.recipegrace.tailorswift.common.ExecuteCommand;
-
 import tailorswift.Activator;
+
+import com.recipegrace.tailorswift.common.ApplyTemplate;
+import com.recipegrace.tailorswift.common.ExecuteCommand;
+import static com.recipegrace.tailorswift.common.ITemplateConstants.*;
 
 public class SBTProjectSupport extends WebScaldingProjectSupport {
 
@@ -40,13 +41,14 @@ public class SBTProjectSupport extends WebScaldingProjectSupport {
 		return "/resources/jobtemplate.zip";
 	}
 	private void applyTemplates() throws IOException {
-		overwriteFile("build.stg", "build.sbt",getProperties());
-		overwriteFile("runOnHadoop.stg", "scripts" + File.separator
-				+ "runOnHadoop.sh", getProperties());
+		
+		ApplyTemplate templates = new ApplyTemplate('<','>', "template");
+		templates.overwriteFile("build.stg", "build.sbt",getProperties(), getProjectName());
+
 	}
-	private Map<String, String> getProperties() {
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("project", getProjectName());
+	private Map<String, Object> getProperties() {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(TEMPLATE_VARIABLE_PROJECT, getProjectName());
 		return properties;
 	}
 

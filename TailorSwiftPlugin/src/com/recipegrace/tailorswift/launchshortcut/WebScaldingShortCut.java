@@ -1,105 +1,204 @@
 package com.recipegrace.tailorswift.launchshortcut;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
+import static com.recipegrace.tailorswift.common.ScalaParsingHelper.getWebScaldingJobClass;
+import static com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab.*;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.jdt.core.IJavaModel;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeHierarchy;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.IDebugModelPresentation;
+import org.eclipse.debug.ui.ILaunchShortcut;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
-import org.eclipse.jdt.internal.core.CompilationUnit;
-import org.eclipse.jdt.internal.debug.ui.launcher.AppletLaunchConfigurationUtils;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.pde.ui.launcher.AbstractLaunchShortcut;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.eclipse.ui.part.FileEditorInput;
+import org.scalaide.core.internal.jdt.model.ScalaClassElement;
+import org.scalaide.core.internal.jdt.model.ScalaSourceFile;
+
+import tailorswift.Activator;
 
 import com.recipegrace.tailorswift.common.ExecuteCommand;
-
-public class WebScaldingShortCut extends AbstractLaunchShortcut {
-
-	ExecuteCommand command = new ExecuteCommand();
-	@Override
-	public void launch(ISelection selection, String mode) {
-		
-		  if(selection instanceof ITreeSelection) {
-	            TreeSelection treeSelection = (TreeSelection) selection;
-	            TreePath[] treePaths = treeSelection.getPaths();
-	            TreePath treePath = treePaths[0];
-	            Object firstSegmentObj = treePath.getFirstSegment();
-	            IProject project = (IProject) ((IAdaptable) firstSegmentObj).getAdapter(IProject.class);
-
-
-	    if(selection instanceof IStructuredSelection) {
-	        IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-	        Object first = structuredSelection.getFirstElement();
-	        if (first instanceof CompilationUnit){
-	        		CompilationUnit unit = (CompilationUnit)first;
-	        		IType type= unit.getTypeRoot().findPrimaryType();
-	        try {
-				ITypeHierarchy hierarchy = type.newSupertypeHierarchy(
-				        new NullProgressMonitor());
-			      IWorkspaceRoot workspaceRoot=ResourcesPlugin.getWorkspace().getRoot();
-			        IJavaModel javaModel=JavaCore.create(workspaceRoot);
-			        IJavaProject javaProject=    javaModel.getJavaProject(project.getName());
-				        IType javaLangApplet = JavaLaunchConfigurationUtils.getMainType(
-				            "com.hello.HelloWorld", javaProject);
-				        if (hierarchy.contains(javaLangApplet)) {
-				        	command.openInfo("All good", "OK", IStatus.INFO);
-				        }else 
-				        	command.openInfo("All bad", "OK", IStatus.INFO);
-			        }
-					
-			catch ( CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	  
-	        }
-	    }
-		  }
-		
-	  
-	}
-
-	@Override
-	public void launch(IEditorPart editor, String mode) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected String getLaunchConfigurationTypeName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void initializeConfiguration(ILaunchConfigurationWorkingCopy wc) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected boolean isGoodMatch(ILaunchConfiguration configuration) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+@SuppressWarnings("restriction")
+public class WebScaldingShortCut implements ILaunchShortcut {
 
 	
+	private static final String WEBSCALDIN_LAUNCH_CONFIGURATION = "TailorSwift.launchWebScaldingConfiguration";
+	ExecuteCommand command = new ExecuteCommand();
+	
+	   protected ILaunchConfigurationType getConfigurationType() {
+	        return DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(WEBSCALDIN_LAUNCH_CONFIGURATION);
+	    }
+
+	@Override
+	public void launch(ISelection selection, String mode) {
+
+
+			
+			if (selection instanceof IStructuredSelection) {
+				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				Object first = structuredSelection.getFirstElement();
+				if (first instanceof ScalaSourceFile) {
+					ScalaSourceFile scalaSourceFile = (ScalaSourceFile) first;
+				
+					try {
+						
+						ScalaClassElement element=	getWebScaldingJobClass(scalaSourceFile);
+						if(element==null) {
+							command.openInfo("No websclading job", "Launch failed" ,IStatus.ERROR);
+						}
+						else {
+							launch(element, mode);
+						
+						}
+					} catch (CoreException e1) {
+						 command.logError(e1, "WebScalding launch failed");
+					}
+
+				}
+			}
+		}
+
+	
+
+	   @Override
+	    public void launch(IEditorPart editor, String mode) {
+	        IEditorInput editorInput = editor.getEditorInput();
+	        if (editorInput instanceof FileEditorInput) {
+	            FileEditorInput fileEditorInput = (FileEditorInput) editorInput;
+	            ICompilationUnit compilationUnit = JavaCore.createCompilationUnitFrom(fileEditorInput.getFile());
+	            if(compilationUnit instanceof ScalaSourceFile) {
+	            	ScalaSourceFile scalaSourceFile = (ScalaSourceFile)compilationUnit;
+	            	ScalaClassElement element;
+					try {
+						element = getWebScaldingJobClass(scalaSourceFile);
+						 launch(element, mode);
+					} catch (CoreException e) {
+						// TODO Auto-generated catch block
+						  command.logError(e, "WebScalding launch failed");
+					}
+	            	
+	            }
+	           
+	        }
+
+	    }
+
+	//
+		
+	    protected void launch(ScalaClassElement element, String mode) {
+	        ILaunchConfiguration config = findLaunchConfiguration(element, getConfigurationType());
+	        launch(config, mode);
+	    }
+
+	    protected void launch(ILaunchConfiguration config, String mode) {
+	        if (config != null) {
+	            DebugUITools.launch(config, mode);
+	        }
+	    }
+
+	
+		protected ILaunchConfiguration findLaunchConfiguration(ScalaClassElement element, ILaunchConfigurationType configType) {
+	        List<ILaunchConfiguration> candidateConfigs = new ArrayList<ILaunchConfiguration>();
+	        try {
+	            ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(configType);
+	            for (int i = 0; i < configs.length; i++) {
+	                ILaunchConfiguration config = configs[i];
+	                String jobClassName = config.getAttribute(WEBSCALDING_LAUNCH_JOB_CLASS_NAME, "");
+	                if (element.getElementName().equals(jobClassName)) {
+	                    candidateConfigs.add(config);
+	                }
+	            }
+	        } catch (CoreException e) {
+	            command.logError(e, "WebScalding launch failed");
+	            return null;
+	        }
+
+	        int candidateCount = candidateConfigs.size();
+
+	        // If no matches, create a new configuration.
+	        if (candidateCount < 1) {
+	            return createConfiguration(element);
+	        } else if (candidateCount == 1) {
+	            return (ILaunchConfiguration) candidateConfigs.get(0);
+	        } else {
+	            // Prompt the user to choose a config. A null result means the user
+	            // canceled the dialog, in which case this method returns null,
+	            // since canceling the dialog should also cancel launching anything.
+	            ILaunchConfiguration config = chooseConfiguration(candidateConfigs);
+	            if (config != null) {
+	                return config;
+	            }
+	        }
+	        return null;
+	    }
+
+
+	    /**
+	     * Show a selection dialog that allows the user to choose one of the specified launch configurations. Return the chosen config, or <code>null</code> if the user canceled the
+	     * dialog.
+	     */
+	    protected ILaunchConfiguration chooseConfiguration(List<?> configList) {
+	        IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
+	        ElementListSelectionDialog dialog = new ElementListSelectionDialog(Activator.getShell(), labelProvider);
+	        dialog.setElements(configList.toArray());
+	        dialog.setTitle("Select Launch Configuration");
+	        dialog.setMessage("Selection the launch configuration you wish to use.");
+	        dialog.setMultipleSelection(false);
+	        int result = dialog.open();
+	        labelProvider.dispose();
+	        if (result == IStatus.OK) {
+	            return (ILaunchConfiguration) dialog.getFirstResult();
+	        }
+	        return null;
+	    }
+
+	    /**
+	     * Create a new configuration based on the Mule project.
+	     * 
+	     * @param project
+	     * @return
+	     */
+	    protected ILaunchConfiguration createConfiguration(ScalaClassElement classElement) {
+	        try {
+	            ILaunchConfigurationType configType = getConfigurationType();
+	            String jobClassName = classElement.getElementName();
+	            String completeJobClassName = classElement.getFullyQualifiedName();
+	            
+	            ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, getLaunchManager().generateLaunchConfigurationName(jobClassName));
+	            wc.setAttribute(WEBSCALDING_LAUNCH_JOB_CLASS_NAME, jobClassName);
+
+	            // needed for some examples to run
+	            wc.setAttribute(WEBSCALDING_LAUNCH_PROJECT_NAME, classElement.getCompilationUnit().getResource().getProject().getName());
+	            wc.setAttribute(WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME, completeJobClassName);
+
+	            return wc.doSave();
+
+	        } catch (CoreException e) {
+	        	  command.logError(e, "WebScalding launch failed");
+	            return null;
+	        }
+	    }
+
+	    /**
+	     * Get the launch manager.
+	     * 
+	     * @return
+	     */
+	    protected ILaunchManager getLaunchManager() {
+	        return DebugPlugin.getDefault().getLaunchManager();
+	    }
 
 }
