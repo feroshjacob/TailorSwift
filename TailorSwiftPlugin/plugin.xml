@@ -11,7 +11,7 @@
       <wizard
             canFinishEarly="true"
             category="tailorswift.category.wizards"
-            class="cb.tailorswift.wizards.WebScaldingNewProject"
+            class="com.recipegrace.tailorswift.newproject.ui.WebScaldingNewSBTProject"
             id="cb.taylorswift.wizards.WebScaldingNewProject"
             name="%wizard.name"
             project="true">
@@ -20,7 +20,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="cb.tailorswift.launch.LaunchWebScaldingJob"
+            delegate="com.recipegrace.tailorswift.launch.LaunchWebScalding"
             id="TailorSwift.launchWebScaldingConfiguration"
             modes="run,debug"
             name="%launchConfigurationType.name"
@@ -31,7 +31,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
+            class="com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchConfigurationTabGroup"
             id="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
             type="TailorSwift.launchWebScaldingConfiguration">
       </launchConfigurationTabGroup>
@@ -46,19 +46,13 @@
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
-      <tab
-            class="cb.tailorswift.launch.LaunchConfigurationMainTab"
-            group="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
-            id="TailorSwift.webscaldingPage"
-            name="TailorSwift.tab2">
-      </tab>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
          
          <page id="TailorSwiftPreferencePage" 
  		name="Tailor Swift"
-    		class="cb.tailorswift.preferences.TailorSwiftPreferencePage">
+    		class="com.recipegrace.tailorswift.preferences.TailorSwiftPreferencePage">
    	</page> 
    </extension>
    <extension
@@ -95,9 +89,62 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="cb.tailorswift.commands.SynchronizeCommand"
+            class="com.recipegrace.tailorswift.commands.SynchronizeCommand"
             commandId="TailorSwiftPlugin.synchronizeNoHupOut">
       </handler>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="com.recipegrace.tailorswift.launchshortcut.WebScaldingShortCut"
+            icon="icons/sample.gif"
+            id="cb.tailorswift.launchshortcut"
+            label="Web Scalding"
+            modes="run">
+      <contextualLaunch>
+        <enablement>
+          <with variable="selection">
+            <count value="1" />
+            <iterate>
+              <test
+                    args="true"
+                    forcePluginActivation="true"
+                    property="com.recipegrace.tailorswift.isWebScaldingJob"
+                    />
+            </iterate>
+          </with>
+        </enablement>
+      </contextualLaunch>
+             </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab"
+            group="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
+            id="cb.tailorswift.launch.WebScaldingLaunchTab"
+            name="WebscaldingLaunch_tab">
+      </tab>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="tailorswift.category.wizards"
+            class="com.recipegrace.tailorswift.newproject.ui.WebScaldingNewMavenProject"
+            id="cb.tailorswift.mavenproject"
+            name="Webscalding Project (Maven)"
+            project="true">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.recipegrace.tailorswift.propertytester.WebScaldingJobTester"
+            id="com.recipegrace.tailorswift.propertytester"
+            namespace="com.recipegrace.tailorswift"
+            properties="isWebScaldingJob"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>
 
 

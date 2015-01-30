@@ -1,9 +1,13 @@
 package tailorswift;
 
 import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -97,5 +101,17 @@ public class Activator extends AbstractUIPlugin {
 	public static String getSSHPassword() {
 		return getDefault().getPreferenceStore().getString(SSH_PASSWORD) ;
 		
+	}
+	public static String getProjectAbsolutePath(String projectFolder) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IProject newProject = workspace.getRoot().getProject(projectFolder);
+
+		String absolutePath =newProject.getLocation().toFile().getAbsolutePath();
+		return absolutePath;
+	}
+
+	public static Shell getShell() {
+		return Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
 	}
 }
