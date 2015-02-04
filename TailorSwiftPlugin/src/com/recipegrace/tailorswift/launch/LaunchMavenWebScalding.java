@@ -12,6 +12,7 @@
 
 package com.recipegrace.tailorswift.launch;
 
+import static com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab.WEBSCALDING_LAUNCH_PROJECT_NAME;
 import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.quote;
 
 import java.io.File;
@@ -20,7 +21,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -37,15 +37,14 @@ import org.eclipse.m2e.internal.launch.LaunchingUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
 
-import com.recipegrace.tailorswift.common.ExecuteCommand;
-
 import tailorswift.Activator;
-import static com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab.*;
+
+import com.recipegrace.tailorswift.common.IOUtils;
 
 
 
 @SuppressWarnings("restriction")
-public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunchConstants{
+public class LaunchMavenWebScalding extends JavaLaunchDelegate  implements MavenLaunchConstants{
 
 	private static final String LAUNCHER_TYPE = "org.codehaus.classworlds.Launcher"; //$NON-NLS-1$
 
@@ -59,7 +58,7 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 	private String programArguments;
 
 	private MavenRuntimeLaunchSupport launchSupport;
-	private final ExecuteCommand command = new ExecuteCommand();
+	private final IOUtils command = new IOUtils();
 
 	private MavenLaunchExtensionsSupport extensionsSupport;
 
@@ -86,7 +85,7 @@ public class LaunchWebScalding extends JavaLaunchDelegate  implements MavenLaunc
 			super.launch(workingCopy, mode, launch, monitor);
 		
      
-			ILaunchesListener2 launchListener = new WebScaldingMavenLaunchListener(configuration); 
+			ILaunchesListener2 launchListener = new WebScaldingBuildTerminateListener(configuration); 
             DebugPlugin.getDefault().getLaunchManager().addLaunches(new ILaunch[] {launch});
             DebugPlugin.getDefault().getLaunchManager().addLaunchListener(launchListener);
             

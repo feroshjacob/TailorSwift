@@ -21,7 +21,7 @@ public class Activator extends AbstractUIPlugin {
 	
 
 	//The identifiers for the preferences	
-	public static final String SBT_HOME = "sbt_home";
+	public static final String SBT_LAUNCH_JAR = "sbt_launch_jar";
 	public static final String SSH_CONNECTION_STRING = "ssh_connection_string";
 	public static final String SSH_PASSWORD = "ssh_password";
 
@@ -78,14 +78,14 @@ public class Activator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
-		store.setDefault(SBT_HOME, DEFAULT_SBT_HOME);
+		store.setDefault(SBT_LAUNCH_JAR, DEFAULT_SBT_HOME);
 		store.setDefault(SSH_CONNECTION_STRING, DEFAULT_SSH_CONNECTION_STRING);
 		store.setDefault(SSH_PASSWORD, DEFAULT_SSH_PASSWORD);
 
 	}
 
-	public static String getSBTPath() {
-		return getDefault().getPreferenceStore().getString(SBT_HOME) ;
+	public static String getSBTLaunchJar() {
+		return getDefault().getPreferenceStore().getString(SBT_LAUNCH_JAR) ;
 	}
 	public static String getSSHUserName() {
 		String connectionString= getDefault().getPreferenceStore().getString(SSH_CONNECTION_STRING) ;

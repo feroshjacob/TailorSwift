@@ -20,11 +20,18 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="com.recipegrace.tailorswift.launch.LaunchWebScalding"
+            delegate="com.recipegrace.tailorswift.launch.LaunchMavenWebScalding"
             id="TailorSwift.launchWebScaldingConfiguration"
             modes="run,debug"
             name="%launchConfigurationType.name"
             public="true"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="com.recipegrace.tailorswift.launch.LaunchSBTWebScalding"
+            id="TailorSwiftPlugin.SBTlaunchConfigurationType"
+            modes="run"
+            name="SBTWebScalding"
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
       </launchConfigurationType>
    </extension>
@@ -34,6 +41,11 @@
             class="com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchConfigurationTabGroup"
             id="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
             type="TailorSwift.launchWebScaldingConfiguration">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="com.recipegrace.tailorswift.launch.ui.SBTWebScaldingLaunchConfigurationTabGroup"
+            id="TailorSwiftPlugin.SBTLaunchConfigurationTabGroup"
+            type="TailorSwiftPlugin.SBTlaunchConfigurationType">
       </launchConfigurationTabGroup>
    </extension>
    <extension

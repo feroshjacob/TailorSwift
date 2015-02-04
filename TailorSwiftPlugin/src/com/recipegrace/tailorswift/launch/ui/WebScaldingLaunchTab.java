@@ -12,6 +12,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -377,19 +379,7 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		});
 
 	}
-	@Override
-	public void deactivated(ILaunchConfigurationWorkingCopy workingCopy) {
-		// TODO Auto-generated method stub
-		super.deactivated(workingCopy);
-		performApply(workingCopy);
-	}
-	
-	@Override
-	public void activated(ILaunchConfigurationWorkingCopy configuration) {
-		// TODO Auto-generated method stub
-		initializeFrom(configuration);
-		
-	}
+
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
@@ -429,6 +419,12 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		   configuration.setAttribute(WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS, argsContent);
 		   String optsContent = KeyValuePair.mkString(programOptions);
 		   configuration.setAttribute(WEBSCALDING_LAUNCH_PROGRAM_OPTIONS, optsContent);
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME, txtMainClass.getText());
+		   
+		   String[] jobClassNameArray =  txtMainClass.getText().split("\\.");
+		   String jobClassName = jobClassNameArray[jobClassNameArray.length-1];
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_JOB_CLASS_NAME, jobClassName);
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_PROJECT_NAME, txtProject.getText());
 	}
 
 	@Override
@@ -441,7 +437,7 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		setErrorMessage(null);
 		setMessage(null);
 
-		return true;
+		return resourceExists(txtProject.getText());
 
 	}
 
@@ -456,5 +452,18 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		return g;
 	}
 
+	protected boolean resourceExists(String text) {
+		if (text.length() > 0) {
+            IPath path = new Path(text);
+            if (ResourcesPlugin.getWorkspace().getRoot().findMember(path) == null) {
+                setErrorMessage("Specified file does not exist");
+                return false;
+            }
+            return true;
+        } else {
+            setMessage("Specify an file");
+            return false;
+        }
+	}
 }
 

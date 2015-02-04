@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions;bundle-version="3.4.600",
  org.scala-ide.sdt.aspects;bundle-version="4.0.0",
  org.scala-lang.scala-compiler;bundle-version="2.11.5",
- org.scala-lang.scala-library;bundle-version="2.11.5"
+ org.scala-lang.scala-library;bundle-version="2.11.5",
+ org.eclipse.core.net;bundle-version="1.2.200"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
