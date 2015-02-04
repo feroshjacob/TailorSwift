@@ -1,4 +1,4 @@
-package cb.tailorswift.ssh;
+package com.recipegrace.tailorswift.ssh;
 
 
 import static org.junit.Assert.*;

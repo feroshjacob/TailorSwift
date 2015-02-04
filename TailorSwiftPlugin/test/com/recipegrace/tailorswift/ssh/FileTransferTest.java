@@ -1,4 +1,4 @@
-package cb.tailorswift.ssh;
+package com.recipegrace.tailorswift.ssh;
 /* -*-mode:java; c-basic-offset:2; indent-tabs-mode:nil -*- */
 /**
  * This program will demonstrate the file transfer from local to remote.

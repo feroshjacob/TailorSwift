@@ -1,4 +1,4 @@
-package cb.tailorswift.template;
+package com.recipegrace.tailorswift.template;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +32,11 @@ public class GenerateBuildFile {
 	
 	
 		
-	// System.out.println(st.render());
+	 System.out.println(st.render());
 	  
 		
 	}
+	
 	@Test
 	public void testScriptFile() throws IOException {
 	//	URL fileURL =  new URL("platform:/plugin/"+ Activator.PLUGIN_ID+"/resources/jobtemplate.zip");
@@ -53,7 +54,7 @@ public class GenerateBuildFile {
 		st.add("options", pairs);
 		 System.out.println(st.render());
 		Assert.assertEquals("#!/bin/bash"+"\n"+
-"hadoop jar someother-0.0.1-jar-with-dependencies.jar -Dinput=hello.txt-Doutput=output.txt com.recipegrace.WordCountJob --hdfs --input hello.txt --output output.txt  ", st.render());
+"hadoop jar someother-0.0.1-jar-with-dependencies.jar -Dinput=hello.txt -Doutput=output.txt com.recipegrace.WordCountJob --hdfs --input hello.txt --output output.txt  ", st.render());
 	
 	  
 		

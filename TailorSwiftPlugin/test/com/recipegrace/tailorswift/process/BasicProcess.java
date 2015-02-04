@@ -1,18 +1,14 @@
-package cb.tailorswift.behavior;
+package com.recipegrace.tailorswift.process;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.junit.Test;
+public abstract class BasicProcess {
 
-public class SSHCommandTest {
-
-	@Test
-	public void test() throws IOException {
+	protected void executeCommand(String[] command) throws IOException {
 		
-		String[] command =new String[]{"ssh", "fjacob.site@qtmhgate1.atl.careerbuilder.com","nohup /bin/sh /home/fjacob.site/runOnCB.sh`</dev/null` >nohup.out 2>&1 &"};
-Runtime r = Runtime.getRuntime();
+	Runtime r = Runtime.getRuntime();
 		
 		Process p = r.exec(command, new String[]{});
 				//p.waitFor();
@@ -30,5 +26,4 @@ Runtime r = Runtime.getRuntime();
 		b1.close();
 		
 	}
-
 }
