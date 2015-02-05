@@ -1,3 +1,3 @@
-template(executable,arguments,main,options) ::=<<#!/bin/bash
-hadoop jar <executable> com.twitter.scalding.Tool <options:{u|-D<u.name>=<u.value> }><main> --hdfs <arguments:{u|--<u.name> <u.value> }> 
+template(executable,arguments,main,options,scaldingTool) ::=<<#!/bin/bash
+hadoop jar <executable> <scaldingTool><options:{u|-D<u.name>=<u.value> }><main> --hdfs <arguments:{u|--<u.name> <u.value> }> 
 >>

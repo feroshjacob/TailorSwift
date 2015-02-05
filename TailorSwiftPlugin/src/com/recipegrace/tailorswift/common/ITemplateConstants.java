@@ -9,6 +9,7 @@ public interface ITemplateConstants {
 	public static final String TEMPLATE_VARIABLE_OPTIONS="options";
 	public static final String TEMPLATE_VARIABLE_ARGUMENTS="arguments";
 	public static final String TEMPLATE_VARIABLE_MAIN="main";
+	public static final String TEMPLATE_VARIABLE_SCALDING_TOOL="scaldingTool";
 			
 }
  

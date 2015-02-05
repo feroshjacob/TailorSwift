@@ -4,6 +4,7 @@ import static com.recipegrace.tailorswift.common.ITemplateConstants.TEMPLATE_VAR
 import static com.recipegrace.tailorswift.common.ITemplateConstants.TEMPLATE_VARIABLE_EXECUTABLE;
 import static com.recipegrace.tailorswift.common.ITemplateConstants.TEMPLATE_VARIABLE_MAIN;
 import static com.recipegrace.tailorswift.common.ITemplateConstants.TEMPLATE_VARIABLE_OPTIONS;
+import static com.recipegrace.tailorswift.common.ITemplateConstants.TEMPLATE_VARIABLE_SCALDING_TOOL;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,6 +130,7 @@ public class PostWebScaldingBuildTask extends JobWithResult {
 				.getAttribute(
 						WebScaldingLaunchTab.WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS,
 						"");
+		
 		List<KeyValuePair> options = KeyValuePair
 				.parseString(programOptions);
 		List<KeyValuePair> arguments = KeyValuePair
@@ -138,8 +140,17 @@ public class PostWebScaldingBuildTask extends JobWithResult {
 		map.put(TEMPLATE_VARIABLE_ARGUMENTS, arguments);
 		map.put(TEMPLATE_VARIABLE_MAIN, getQualifiedJobClass());
 		map.put(TEMPLATE_VARIABLE_EXECUTABLE, getExecutable());
-
+		map.put(TEMPLATE_VARIABLE_SCALDING_TOOL, getScaldingTool());
+			
+//
 		return map;
+	}
+
+	protected String getScaldingTool() {
+		
+		if(isMaven)
+		return "com.twitter.scalding.Tool ";
+		else return "";
 	}
 
 	private String getQualifiedJobClass() throws CoreException {
