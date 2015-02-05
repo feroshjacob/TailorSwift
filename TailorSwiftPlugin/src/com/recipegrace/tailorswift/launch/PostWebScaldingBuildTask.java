@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -20,8 +19,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.IMavenConstants;
 
 import tailorswift.Activator;
 
@@ -33,15 +30,17 @@ import com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab;
 import com.recipegrace.tailorswift.ssh.FileTransfer;
 import com.recipegrace.tailorswift.ssh.SSHCommand;
 
-@SuppressWarnings("restriction")
+
 public class PostWebScaldingBuildTask extends JobWithResult {
 	
 	
 	private static final String SCRIPT_FILE = "script.sh";
 	private ILaunchConfiguration configuration =null;
-	public PostWebScaldingBuildTask(ILaunchConfiguration configuration, String jobName) {
+	private boolean isMaven =false;
+	public PostWebScaldingBuildTask(ILaunchConfiguration configuration, String jobName, boolean isMaven) {
 		super(jobName);
 		 this.configuration=configuration;
+		 this.isMaven=isMaven;
 		 
 	}
 
@@ -97,9 +96,9 @@ public class PostWebScaldingBuildTask extends JobWithResult {
 			IProgressMonitor monitor) throws CoreException,
 			IOException, InterruptedException, JSchException {
 		String projectName = getProjectName();
+		String scalaTargetFolder = isMaven?"": ("scala-2.10"+ File.separator);
 		String path = Activator.getProjectAbsolutePath(projectName)
-				+ File.separator + "target" + File.separator
-				+ getExecutable();
+				+ File.separator + "target" + File.separator + scalaTargetFolder+ getExecutable();
 		uploadResource(new File(path), monitor);
 
 	}
@@ -151,19 +150,13 @@ public class PostWebScaldingBuildTask extends JobWithResult {
 	}
 
 	private String getExecutable() throws CoreException {
-		return getProjectName() + "-" + getVersion()
+		return getProjectName() 
 				+ "-job.jar";
 	}
 
-	protected String getVersion() throws CoreException {
-		String projectName = getProjectName();
-		IFile pomFile = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(projectName)
-				.getFile(IMavenConstants.POM_FILE_NAME);
 
-		return MavenPlugin.getMavenModelManager()
-				.readMavenModel(pomFile).getVersion();
-	}
+
+
 
 	private String getProjectName() throws CoreException {
 

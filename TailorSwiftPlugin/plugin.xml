@@ -21,15 +21,15 @@
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="com.recipegrace.tailorswift.launch.LaunchMavenWebScalding"
-            id="TailorSwift.launchWebScaldingConfiguration"
+            id="TailorSwift.launchMavenWebScaldingConfiguration"
             modes="run,debug"
-            name="%launchConfigurationType.name"
+            name="MavenWebScalding"
             public="true"
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
             delegate="com.recipegrace.tailorswift.launch.LaunchSBTWebScalding"
-            id="TailorSwiftPlugin.SBTlaunchConfigurationType"
+            id="TailorSwift.SBTWebScaldingConfiguration"
             modes="run"
             name="SBTWebScalding"
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
@@ -39,25 +39,27 @@
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
             class="com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchConfigurationTabGroup"
-            id="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
-            type="TailorSwift.launchWebScaldingConfiguration">
+            id="cb.tailorswift.launch.MavenWebScaldingLaunchConfigurationTabGroup"
+            type="TailorSwift.launchMavenWebScaldingConfiguration">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
-            class="com.recipegrace.tailorswift.launch.ui.SBTWebScaldingLaunchConfigurationTabGroup"
-            id="TailorSwiftPlugin.SBTLaunchConfigurationTabGroup"
-            type="TailorSwiftPlugin.SBTlaunchConfigurationType">
+            class="com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchConfigurationTabGroup"
+            id="cb.tailorswift.launch.SBTWebScaldingLaunchConfigurationTabGroup"
+            type="TailorSwift.SBTWebScaldingConfiguration">
       </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            configTypeID="TailorSwift.launchWebScaldingConfiguration"
-            icon="icons/sample.gif"
-            id="TailorSwift.launchConfigurationTypeImage1">
+            configTypeID="TailorSwift.launchMavenWebScaldingConfiguration"
+            icon="icons/car.png"
+            id="TailorSwift.MavenlaunchConfigurationTypeImage">
       </launchConfigurationTypeImage>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <launchConfigurationTypeImage
+            configTypeID="TailorSwift.SBTWebScaldingConfiguration"
+            icon="icons/car.png"
+            id="TailorSwift.SBTlaunchConfigurationTypeImage1">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -132,10 +134,16 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
-            class="com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab"
-            group="cb.tailorswift.launch.WebScaldingLaunchConfigurationTabGroup"
-            id="cb.tailorswift.launch.WebScaldingLaunchTab"
-            name="WebscaldingLaunch_tab">
+            class="com.recipegrace.tailorswift.launch.ui.MavenWebScaldingLaunchTab"
+            group="cb.tailorswift.launch.MavenWebScaldingLaunchConfigurationTabGroup"
+            id="cb.tailorswift.launch.MavenWebScaldingLaunchTab"
+            name="MavenWebscaldingLaunchTab">
+      </tab>
+      <tab
+            class="com.recipegrace.tailorswift.launch.ui.SBTWebScaldingLaunchTab"
+            group="cb.tailorswift.launch.SBTWebScaldingLaunchConfigurationTabGroup"
+            id="cb.tailorswift.launch.SBTWebScaldingLaunchTab"
+            name="SBTWebscaldingLaunchTab">
       </tab>
    </extension>
    <extension

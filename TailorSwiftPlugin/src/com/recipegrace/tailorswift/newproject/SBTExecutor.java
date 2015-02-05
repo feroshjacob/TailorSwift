@@ -16,7 +16,6 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import tailorswift.Activator;
 
 import com.recipegrace.tailorswift.common.IOUtils;
-import com.recipegrace.tailorswift.launch.WebScaldingBuildTerminateListener;
 
 /**
 *   Thanks

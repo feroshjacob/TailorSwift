@@ -9,8 +9,10 @@ public class WebScaldingBuildTerminateListener implements ILaunchesListener2 {
 
 		private ILaunchConfiguration configuration;
 
-	public WebScaldingBuildTerminateListener(ILaunchConfiguration configuration) {
+		private boolean isMaven;
+	public WebScaldingBuildTerminateListener(ILaunchConfiguration configuration, boolean isMaven) {
 		this.configuration = configuration;
+		this.isMaven=isMaven;
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class WebScaldingBuildTerminateListener implements ILaunchesListener2 {
 	public void launchesTerminated(ILaunch[] launches) {
 		// TODO Auto-generated method stub
 
-		Job job = new PostWebScaldingBuildTask(configuration,"Submitting Scalding Job");
+		Job job = new PostWebScaldingBuildTask(configuration,"Submitting Scalding Job", isMaven);
 		job.schedule();
 
 	}

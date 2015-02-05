@@ -159,7 +159,7 @@ template(groupId, project, version) ::= <<
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 				
-					<finalName>\${project.name}-\${project.version}</finalName>
+					<finalName>\${project.name}</finalName>
 					<appendAssemblyId>true</appendAssemblyId>
 					<descriptors>
 						<descriptor>assembly.xml</descriptor>

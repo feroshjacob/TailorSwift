@@ -3,19 +3,15 @@
    
    import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-   
 
-
-   import javax.xml.transform.OutputKeys;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-   
 
-
-   import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -27,7 +23,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.internal.launching.LaunchingMessages;
 import org.eclipse.jdt.internal.launching.LaunchingPlugin;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.w3c.dom.Document;
@@ -35,7 +30,8 @@ import org.w3c.dom.Document;
    /**
     * This class contains a number of static helper methods useful for the 'local Java' delegate.
     */
-   public class JavaLaunchConfigurationUtils {
+   @SuppressWarnings("restriction")
+public class JavaLaunchConfigurationUtils {
                                                                                                                                                                    
            /**
             * Return the <code>IType</code> referenced in the specified configuration and contained in 

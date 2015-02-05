@@ -25,6 +25,8 @@ excludedJars in assembly \<\<= (fullClasspath in assembly) map { cp =>
     cp filter { jar => excludes(jar.data.getName) }
   }
 
+assemblyJarName in assembly := "<project>-job.jar"
+
 test in assembly := {}
 
 libraryDependencies ++= Seq(
