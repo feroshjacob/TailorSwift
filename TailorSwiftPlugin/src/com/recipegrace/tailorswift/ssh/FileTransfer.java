@@ -142,7 +142,7 @@ public class FileTransfer {
 		boolean ptimestamp = true;
 		long filesize = file.length();
 
-		byte[] buf = new byte[2];
+		byte[] buf = new byte[1024];
 		int blocks = (int)(filesize + buf.length-1)/ buf.length;
 		
 		if(monitor!=null)

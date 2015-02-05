@@ -39,7 +39,7 @@ public class TailorSwiftPreferencePage extends PreferencePage implements
 
 	private void initalizeValues() {
 		IPreferenceStore store = getPreferenceStore();
-		sbtHome.setText(store.getString(Activator.SBT_HOME));
+		sbtHome.setText(store.getString(Activator.SBT_LAUNCH_JAR));
 		sshConnectionString.setText(store.getString(Activator.SSH_CONNECTION_STRING));
 		sshPassword.setText(store.getString(Activator.SSH_PASSWORD));
 	}
@@ -54,7 +54,7 @@ public class TailorSwiftPreferencePage extends PreferencePage implements
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&SBT executable:");
+		label.setText("&SBT launch jar (look in SBT installation bin folder):");
 
 		sbtHome = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -109,7 +109,7 @@ public class TailorSwiftPreferencePage extends PreferencePage implements
 	@Override
 	public boolean performOk() {
 		IPreferenceStore store = getPreferenceStore();
-		store.setValue(Activator.SBT_HOME,sbtHome.getText());
+		store.setValue(Activator.SBT_LAUNCH_JAR,sbtHome.getText());
 		store.setValue(Activator.SSH_CONNECTION_STRING,sshConnectionString.getText());
 		store.setValue(Activator.SSH_PASSWORD,sshPassword.getText());
 		

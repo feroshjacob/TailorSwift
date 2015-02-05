@@ -1,32 +1,15 @@
 package com.recipegrace.tailorswift.common;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleConstants;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
 
 import tailorswift.Activator;
 
-public class ExecuteCommand {
+public class IOUtils {
 	
-
+/*
 
 	public  void executeCommand(String[] command, String absolutePath) throws IOException, InterruptedException, PartInitException {
 
@@ -88,6 +71,8 @@ public class ExecuteCommand {
 		conMan.addConsoles(new IConsole[]{myConsole});
 		return myConsole;
 	}
+	
+	*/
 	public   void logError(Exception ex, final String title) {
 		final String message = ex.getMessage();
 		final String formattedMessage = Activator.PLUGIN_ID + " : " + message; //$NON-NLS-1$

@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 public abstract class JobWithResult extends Job {
 
 
-	protected ExecuteCommand command = new ExecuteCommand();
+	protected IOUtils command = new IOUtils();
 	public JobWithResult(final String jobName) {
 		super(jobName);
 		setUser(true);

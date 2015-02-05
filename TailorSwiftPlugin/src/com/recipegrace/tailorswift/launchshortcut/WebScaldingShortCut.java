@@ -3,7 +3,6 @@ package com.recipegrace.tailorswift.launchshortcut;
 import static com.recipegrace.tailorswift.common.ScalaParsingHelper.getOneWebScaldingJobClass;
 import static com.recipegrace.tailorswift.launch.ui.WebScaldingLaunchTab.*;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,16 +29,20 @@ import org.scalaide.core.internal.jdt.model.ScalaSourceFile;
 
 import tailorswift.Activator;
 
-import com.recipegrace.tailorswift.common.ExecuteCommand;
+import com.recipegrace.tailorswift.common.IOUtils;
 @SuppressWarnings("restriction")
 public class WebScaldingShortCut implements ILaunchShortcut {
 
 	
+	private static final String WEBSCALDING_SBT_LAUNCH_CONFIGURATION = "TailorSwiftPlugin.SBTlaunchConfigurationType";
 	private static final String WEBSCALDIN_LAUNCH_CONFIGURATION = "TailorSwift.launchWebScaldingConfiguration";
-	ExecuteCommand command = new ExecuteCommand();
+	IOUtils command = new IOUtils();
 	
-	   protected ILaunchConfigurationType getConfigurationType() {
+	   protected ILaunchConfigurationType getConfigurationType(boolean isMaven) {
+		   if(isMaven)
 	        return DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(WEBSCALDIN_LAUNCH_CONFIGURATION);
+		   else 
+			   return DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(WEBSCALDING_SBT_LAUNCH_CONFIGURATION);
 	    }
 
 	@Override
@@ -51,16 +54,17 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 				Object first = structuredSelection.getFirstElement();
 				if (first instanceof ScalaSourceFile) {
-					ScalaSourceFile scalaSourceFile = (ScalaSourceFile) first;
 				
 					try {
-						
+						ScalaSourceFile scalaSourceFile = (ScalaSourceFile) first;
+						boolean isMaven = scalaSourceFile.getResource().getProject().hasNature("org.eclipse.m2e.core.maven2Nature");
+							
 						ScalaClassElement element=	getOneWebScaldingJobClass(scalaSourceFile);
 						if(element==null) {
 							command.openInfo("No websclading job", "Launch failed" ,IStatus.ERROR);
 						}
 						else {
-							launch(element, mode);
+							launch(element, mode,isMaven);
 						
 						}
 					} catch (CoreException e1) {
@@ -83,8 +87,9 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 	            	ScalaSourceFile scalaSourceFile = (ScalaSourceFile)compilationUnit;
 	            	ScalaClassElement element;
 					try {
+						boolean isMaven = scalaSourceFile.getResource().getProject().hasNature("org.eclipse.m2e.core.maven2Nature");
 						element = getOneWebScaldingJobClass(scalaSourceFile);
-						 launch(element, mode);
+						 launch(element, mode, isMaven);
 					} catch (CoreException e) {
 						// TODO Auto-generated catch block
 						  command.logError(e, "WebScalding launch failed");
@@ -98,8 +103,8 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 
 	//
 		
-	    protected void launch(ScalaClassElement element, String mode) {
-	        ILaunchConfiguration config = findLaunchConfiguration(element, getConfigurationType());
+	    protected void launch(ScalaClassElement element, String mode, boolean isMaven ) {
+	        ILaunchConfiguration config = findLaunchConfiguration(element, getConfigurationType(isMaven), isMaven);
 	        launch(config, mode);
 	    }
 
@@ -110,7 +115,7 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 	    }
 
 	
-		protected ILaunchConfiguration findLaunchConfiguration(ScalaClassElement element, ILaunchConfigurationType configType) {
+		protected ILaunchConfiguration findLaunchConfiguration(ScalaClassElement element, ILaunchConfigurationType configType, boolean isMaven) {
 	        List<ILaunchConfiguration> candidateConfigs = new ArrayList<ILaunchConfiguration>();
 	        try {
 	            ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(configType);
@@ -130,7 +135,7 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 
 	        // If no matches, create a new configuration.
 	        if (candidateCount < 1) {
-	            return createConfiguration(element);
+	            return createConfiguration(element, isMaven);
 	        } else if (candidateCount == 1) {
 	            return (ILaunchConfiguration) candidateConfigs.get(0);
 	        } else {
@@ -171,9 +176,9 @@ public class WebScaldingShortCut implements ILaunchShortcut {
 	     * @param project
 	     * @return
 	     */
-	    protected ILaunchConfiguration createConfiguration(ScalaClassElement classElement) {
+	    protected ILaunchConfiguration createConfiguration(ScalaClassElement classElement, boolean isMaven) {
 	        try {
-	            ILaunchConfigurationType configType = getConfigurationType();
+	            ILaunchConfigurationType configType = getConfigurationType(isMaven);
 	            String jobClassName = classElement.getElementName();
 	            String completeJobClassName = classElement.getFullyQualifiedName();
 	            

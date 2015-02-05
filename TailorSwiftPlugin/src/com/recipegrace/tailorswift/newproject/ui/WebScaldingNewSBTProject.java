@@ -9,7 +9,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-import com.recipegrace.tailorswift.common.ExecuteCommand;
+import com.recipegrace.tailorswift.common.IOUtils;
 import com.recipegrace.tailorswift.newproject.SBTProjectSupport;
 import com.recipegrace.tailorswift.newproject.WebScaldingProjectSupport;
 
@@ -41,7 +41,7 @@ public class WebScaldingNewSBTProject extends Wizard implements INewWizard {
 		    try {
 				project.createProject( location);
 			} catch (CoreException e) {
-			 new ExecuteCommand().logError(e, "Project creation");	
+			 new IOUtils().logError(e, "Project creation");	
 			}
 		    return true;
 	}

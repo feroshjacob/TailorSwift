@@ -1,27 +1,20 @@
 package com.recipegrace.tailorswift.commands;
 
-import java.io.File;
 import java.io.IOException;
 
-import org.apache.maven.project.MavenProject;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -29,13 +22,13 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import tailorswift.Activator;
 
 import com.jcraft.jsch.JSchException;
-import com.recipegrace.tailorswift.common.ExecuteCommand;
+import com.recipegrace.tailorswift.common.IOUtils;
 import com.recipegrace.tailorswift.common.JobWithResult;
 import com.recipegrace.tailorswift.ssh.FileTransfer;
 
 public class SynchronizeCommand implements IHandler {
 
-	ExecuteCommand command= new ExecuteCommand();
+	IOUtils command= new IOUtils();
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
 		// TODO Auto-generated method stub
@@ -63,16 +56,7 @@ public class SynchronizeCommand implements IHandler {
 			final IFile file = (IFile) structured.getFirstElement();
 			// get the path
 			final IPath path = file.getLocation();
-			IWorkspace workspace = ResourcesPlugin.getWorkspace(); 
-			IProject newProject = workspace.getRoot().getProject("HelloWorld");
-		 //   try {
-		//	MavenProject project=	MavenPlugin.getMaven().readProject(new File(""), new NullProgressMonitor());
-		//	project.
-	//		} catch (CoreException e1) {
-				// TODO Auto-generated catch block
-		//		e1.printStackTrace();
-		//	}
-			
+
 			Job job = new JobWithResult("Update the nohub.out file") {
 				protected IStatus run(IProgressMonitor monitor) {
 		

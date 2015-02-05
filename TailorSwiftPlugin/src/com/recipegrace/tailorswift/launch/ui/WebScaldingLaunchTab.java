@@ -12,6 +12,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -38,18 +40,21 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
 
 @SuppressWarnings("restriction")
-public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
+public abstract class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 
-	public static final String TAB_NAME = "WebscaldingLaunch_tab";
+	
 	public static final String WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS="WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS";
 	public static final String WEBSCALDING_LAUNCH_PROGRAM_OPTIONS="WEBSCALDING_LAUNCH_PROGRAM_OPTIONS";
 	public static final String WEBSCALDING_LAUNCH_JOB_CLASS_NAME="WEBSCALDING_LAUNCH_JOB_CLASS_NAME";
 	public static final String WEBSCALDING_LAUNCH_PROJECT_NAME="WEBSCALDING_LAUNCH_PROJECT_NAME";
 	public static final String WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME= "WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME";
+	public static final String WEBSCALDING_LAUNCH_SKIP_BUILD= "WEBSCALDING_LAUNCH_SKIP_BUILD";
 
 	
 	private Text txtMainClass;
 	private Text txtProject;
+	private Button btnSkipBuild;
+	
 
 	private ListViewer optionsLV;
 	private ListViewer argumentsLV;
@@ -157,6 +162,18 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		createArgumentBtns(comp);
 
 		setControl(comp);
+		
+		Label lblSkipBuild = new Label(comp, SWT.NONE);
+		lblSkipBuild.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblSkipBuild.setText("Skip build");
+		
+		btnSkipBuild = new Button(comp, SWT.CHECK);
+		
+		btnSkipBuild.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+	
+		new Label(comp, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
 	}
 
 	protected void createArgumentBtns(Composite comp) {
@@ -377,19 +394,7 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		});
 
 	}
-	@Override
-	public void deactivated(ILaunchConfigurationWorkingCopy workingCopy) {
-		// TODO Auto-generated method stub
-		super.deactivated(workingCopy);
-		performApply(workingCopy);
-	}
-	
-	@Override
-	public void activated(ILaunchConfigurationWorkingCopy configuration) {
-		// TODO Auto-generated method stub
-		initializeFrom(configuration);
-		
-	}
+
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
@@ -405,6 +410,7 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 			
 			    txtMainClass.setText( configuration.getAttribute(WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME, ""));
 			    txtProject.setText( configuration.getAttribute(WEBSCALDING_LAUNCH_PROJECT_NAME, ""));
+			    btnSkipBuild.setSelection(configuration.getAttribute(WEBSCALDING_LAUNCH_SKIP_BUILD, false));
 			    
 				String  programArgumentsString = configuration.getAttribute(WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS, "");
 				programArguments = KeyValuePair.parseString(programArgumentsString);
@@ -429,19 +435,22 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		   configuration.setAttribute(WEBSCALDING_LAUNCH_PROGRAM_ARGUMENTS, argsContent);
 		   String optsContent = KeyValuePair.mkString(programOptions);
 		   configuration.setAttribute(WEBSCALDING_LAUNCH_PROGRAM_OPTIONS, optsContent);
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_JOB_QUALIFIED_CLASS_NAME, txtMainClass.getText());
+		   
+		   String[] jobClassNameArray =  txtMainClass.getText().split("\\.");
+		   String jobClassName = jobClassNameArray[jobClassNameArray.length-1];
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_JOB_CLASS_NAME, jobClassName);
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_PROJECT_NAME, txtProject.getText());
+		   configuration.setAttribute(WEBSCALDING_LAUNCH_SKIP_BUILD, btnSkipBuild.getSelection());
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return TAB_NAME;
-	}
+	
 
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		setErrorMessage(null);
 		setMessage(null);
 
-		return true;
+		return resourceExists(txtProject.getText());
 
 	}
 
@@ -456,5 +465,18 @@ public class WebScaldingLaunchTab extends AbstractLaunchConfigurationTab {
 		return g;
 	}
 
+	protected boolean resourceExists(String text) {
+		if (text.length() > 0) {
+            IPath path = new Path(text);
+            if (ResourcesPlugin.getWorkspace().getRoot().findMember(path) == null) {
+                setErrorMessage("Specified file does not exist");
+                return false;
+            }
+            return true;
+        } else {
+            setMessage("Specify an file");
+            return false;
+        }
+	}
 }
 

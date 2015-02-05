@@ -1,4 +1,4 @@
-package cb.tailorswift.ssh;
+package com.recipegrace.tailorswift.ssh;
 
 import java.io.IOException;
 import java.util.List;
