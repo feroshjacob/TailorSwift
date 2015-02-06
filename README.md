@@ -7,8 +7,9 @@ Eclipse plugin tailored for swift big data access using scalding. This is an ecl
 <b> Prerequisites </b>
 
 1. Mac/Windows environment (Implemented in Mac, tried in Windows. see no problems in working on a Linux machine)
-2. SBT installed ( Works on 0.13.7)
-3. Eclipse with Scala-ide (Works on Eclipse Kepler and scala-ide 3.0.3)
+2. SBT downloaded and extracted, ( Works on 0.13.7)
+3. Eclipse with Scala-ide (Works on Eclipse Luna and scala-ide 4.0.0)
+4. Plugin m2eclipse-scala if you are plannig to work with Maven instead of SBT
 
 <b> Installation </b>
 
@@ -20,24 +21,21 @@ Eclipse plugin tailored for swift big data access using scalding. This is an ecl
 <i>Configuring the cluster and SBT installation  </i> 
 
   -  Selected Preferences -> Tailorswift
-  -  Provide the SBT  binary location (sbt for UNIX/MAC and sbt.bat for Windows)
+  -  Provide the SBT  "sbt-launch.jar" location
   -  Provide the connection string and password for the Cluster connection.
 
 <i>Creating a WebScalding Project </i> 
   
-  - Select "File" -> "New"  -> "Project" -> "Webscalding" -> "New WebScalding Project" -> "Next" 
+  - Select "File" -> "New"  -> "Project" -> "Webscalding" -> "New WebScalding Project (SBT/Maven)" -> "Next" 
   - Enter a name for the project
   - "Finish"
 
-A SCALA project should be  created  and user can run it in a cluster (Currently the cluster details are hard coded, can be changed later ).
-
+A SCALA project should be  created  and user can run it in a cluster.
 
 <i>Runing a WebScalding Project </i> 
-   - Select "Run" -> "Run Configurations" -> "New Configuration" 
-   - Select the project you want to run
-   - Select the script file you want to execute
-   - "Run"
-
+   - Select "Run" -> "Run Configurations" -> "New Configuration" and provide the details
+   - OR select a SCALA class overriding the com.twitter.scalding.Job class and select option "as WebScalding Job"
+  
 An example setup video is given here
 [![ScreenShot](https://github.com/feroshjacob/TailorSwift/blob/master/resources/youtube.png)](http://youtu.be/3cMv6viuwW0)
 
