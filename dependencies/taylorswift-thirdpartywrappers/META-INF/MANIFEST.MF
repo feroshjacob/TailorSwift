@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: com.recipegrace.taylorswift-thirdpartylibs
+Embed-Directory: jars
+Built-By: fjacob
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1423198989291
+Embed-Dependency: ST4
+Import-Package: javax.swing,javax.swing.border,javax.swing.event,javax
+ .swing.text,javax.swing.tree,org.antlr.runtime,org.antlr.runtime.tree
+ ,org.stringtemplate.v4;version="4.0",org.stringtemplate.v4.compiler;v
+ ersion="4.0",org.stringtemplate.v4.debug;version="4.0",org.stringtemp
+ late.v4.gui;version="4.0",org.stringtemplate.v4.misc;version="4.0"
+Tool: Bnd-0.0.357
+Export-Package: org.stringtemplate.v4.compiler;version="4.0.8",org.str
+ ingtemplate.v4.debug;version="4.0.8",org.stringtemplate.v4;version="4
+ .0.8",org.stringtemplate.v4.gui;version="4.0.8",org.stringtemplate.v4
+ .misc;version="4.0.8"
+Bundle-Version: 1.0.0
+Bundle-Name: taylorswift-thirdpartylibs
+Bundle-ClassPath: jars/ST4-4.0.8.jar
+Embed-Transitive: true
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.8.0_05
+

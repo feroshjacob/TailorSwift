@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Export-Package: com.recipegrace.tailorswift.common;uses:="org.stringte
+ mplate.v4";version="1.0.0",tycho.demo.itp02.pomfirst;version="1.0.0"
+Bundle-SymbolicName: com.recipegrace.taylorswift-thirdpartywrappers
+Bundle-Name: taylorswift-thirdpartywrappers
+Bundle-Version: 1.0.0
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1423198989451
+Import-Package: com.recipegrace.tailorswift.common;version="1.0",org.s
+ tringtemplate.v4,tycho.demo.itp02.pomfirst;version="1.0"
+Created-By: 1.8.0_05 (Oracle Corporation)
+Tool: Bnd-0.0.357
+

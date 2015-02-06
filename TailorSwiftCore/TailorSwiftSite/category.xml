@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/TailorSwiftFeature_0.0.2.jar" id="TailorSwiftFeature" version="0.0.2">
+      <category name="TailorSwiftFeature"/>
+   </feature>
+   <bundle id="com.recipegrace.taylorswift-thirdpartylibs" version="1.0.0">
+      <category name="TailorSwiftFeature"/>
+   </bundle>
+   <bundle id="com.recipegrace.taylorswift-thirdpartywrappers" version="1.0.0">
+      <category name="TailorSwiftFeature"/>
+   </bundle>
+   <category-def name="TailorSwiftFeature" label="TailorSwiftFeature"/>
+</site>

@@ -1,0 +1,4 @@
+2015-02-05 23:28:54,581 [Start Level: Equinox Container: 4045f29f-b8ad-0014-1b33-b2b9f26da9c2] INFO  o.e.s.s.a.l.LogonAuthorizationService - Setting authenticator: org.eclipse.scada.core.server.common.ServiceCommon$1@1288041c
+2015-02-05 23:28:54,592 [Start Level: Equinox Container: 4045f29f-b8ad-0014-1b33-b2b9f26da9c2] INFO  o.e.s.d.s.common.impl.HiveCommon - Starting Hive
+2015-02-05 23:28:54,681 [Component Resolve Thread (Bundle 165)] INFO  o.e.s.u.osgi.SingleServiceTracker - Adding service: {org.eclipse.scada.sec.audit.AuditLogService}={service.vendor=Eclipse.org, service.description=An audit log which forwards logs messages to SLF4J, component.name=org.eclipse.scada.sec.audit.log.slf4j, component.id=45, service.id=197, service.bundleid=619, service.scope=bundle}
+2015-02-05 23:28:54,683 [Component Resolve Thread (Bundle 165)] INFO  o.e.s.s.o.TrackingAuditLogImplementation - Setting audit log service: org.eclipse.scada.sec.audit.log.slf4j.LogServiceImpl@458dde30
