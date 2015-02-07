@@ -19,6 +19,7 @@
     <tycho.extras.version>0.22.0</tycho.extras.version>
     <tycho.test.platformArgs/>
     <tycho.test.jvmArgs>-Xmx512m -XX:MaxPermSize=256m ${tycho.test.platformArgs}</tycho.test.jvmArgs>
+      <scala.version>2.11.5</scala.version>
 
   </properties>
 
@@ -29,9 +30,9 @@
       <url>http://download.eclipse.org/releases/luna</url>
     </repository>
         <repository>
-      <id>scala-ide</id>
-      <layout>p2</layout>
-      <url> http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site</url>
+       <id>scala eclipse toolchain osgi</id>
+       <layout>p2</layout>
+       <url>http://download.scala-ide.org/sdk/e38/scala210/stable/site</url>
     </repository>
   </repositories>
   
@@ -90,6 +91,23 @@
             <forkedProcessTimeoutInSeconds>60</forkedProcessTimeoutInSeconds>
           </configuration>
         </plugin>
+          <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.1.4</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>add-source</goal>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+        </configuration>
+      </plugin>
       </plugins>
     </pluginManagement>
   </build>
