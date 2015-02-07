@@ -102,13 +102,6 @@
       </command>
    </extension>
    <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="com.recipegrace.tailorswift.commands.SynchronizeCommand"
-            commandId="TailorSwiftPlugin.synchronizeNoHupOut">
-      </handler>
-   </extension>
-   <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             class="com.recipegrace.tailorswift.launchshortcut.WebScaldingShortCut"
