@@ -17,5 +17,6 @@ TailorSwiftCore/TailorSwiftSite/.settings/target/
 .settings/
 *.jar
 TailorSwiftCore/TailorSwiftPlugin/bin/
+TailorSwiftCore/TailorSwiftPlugin/.cache
 
 
