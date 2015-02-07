@@ -15,7 +15,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
 /*
- *  A lot of code taken  from 
+ *  A lot of code taken  from  Jsch 
  * 
  */
 public class FileTransfer {
